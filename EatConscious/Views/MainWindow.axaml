@@ -6,15 +6,25 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="EatConscious.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
+        x:CompileBindings="True"
         Icon="/Assets/avalonia-logo.ico"
         Title="EatConscious">
+
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    
+    <TabControl>
+        <TabItem Header="Ingredients">
+            <StackPanel>
+                <ListBox ItemsSource="{Binding Measures}" SelectionMode="Multiple,Toggle"/>
+                <Button Command="{Binding Click}">Add 300ml</Button>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Recipes">Lorem Ipsum</TabItem>
+    </TabControl>
 
 </Window>

@@ -46,4 +46,8 @@ public static class IntExtensions
     {
         return new T() { Value = x };
     }
+
+    public static Gram G(this int x) => x.ToMeasure<Gram>();
+    public static Mililiter Ml(this int x) => x.ToMeasure<Mililiter>();
+    public static Piece Pcs(this int x) => x.ToMeasure<Piece>();
 }

@@ -3,21 +3,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace EatConscious.Models;
 
-public static class BaseMeasures
-{
-    // all ingredients have info per these measures
-    public static Measure Get(Measure m)
-    {
-        return m switch
-        {
-            Gram => 100.ToMeasure<Gram>(),
-            Mililiter => 100.ToMeasure<Mililiter>(),
-            Piece => 1.ToMeasure<Piece>(),
-            _ => throw new ArgumentException($"The measure {m.GetType()} is not supported")
-        };
-    }
-}
-
 public record Ingredient
 {
     public string Name { get; set; }
@@ -30,7 +15,7 @@ public record Ingredient
     public Ingredient(string name, Nutrients nutrientsPerX, Measure x, double pricePerY, Measure y)
     {
         Name = name;
-        var baseMeasure = BaseMeasures.Get(x);
+        var baseMeasure = Measure.GetBase(x);
         Nutrients = nutrientsPerX * (baseMeasure / x);
         Price = pricePerY * (baseMeasure / y);
     }

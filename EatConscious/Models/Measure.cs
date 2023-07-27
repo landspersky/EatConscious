@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 
@@ -7,9 +8,21 @@ namespace EatConscious.Models;
 
 public abstract class Measure
 {
-    public double Value { get; init; }
+    public double Value { get; set; }
 
     public abstract string MeasureId { get; }
+    
+    // all ingredients have info per these measures
+    public static Measure GetBase(Measure m)
+    {
+        return m switch
+        {
+            Gram => 100.ToMeasure<Gram>(),
+            Mililiter => 100.ToMeasure<Mililiter>(),
+            Piece => 1.ToMeasure<Piece>(),
+            _ => throw new ArgumentException($"The measure {m.GetType()} is not supported")
+        };
+    }
 
     // 1 X for each class X derived from Measure ie. [1 g, 1 ml,...]
     public static List<Measure> OneOfEach = GetOneOfEach();

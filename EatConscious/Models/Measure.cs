@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace EatConscious.Models;
 
@@ -6,7 +9,29 @@ public abstract class Measure
 {
     public double Value { get; init; }
 
-    protected abstract string MeasureId { get; }
+    public abstract string MeasureId { get; }
+
+    // 1 X for each class X derived from Measure ie. [1 g, 1 ml,...]
+    public static List<Measure> OneOfEach = GetOneOfEach();
+    
+    private static List<Measure> GetOneOfEach()
+    {
+        
+        var assembly = Assembly.GetExecutingAssembly();
+        // get all the types inheriting from Measure
+        var measures = assembly.GetTypes()
+            .Where(type => typeof(Measure).IsAssignableFrom(type) && !type.IsAbstract);
+
+        // for each Type T, invoke the generic method of creating T on 1
+        var oneOfEach = measures.Select(type =>
+        {
+            MethodInfo? method = typeof(IntExtensions).GetMethod(nameof(IntExtensions.ToMeasure));
+            MethodInfo genericMethod = method.MakeGenericMethod(type);
+            return (Measure)genericMethod.Invoke(null, new object[]{1});
+        });
+        
+        return oneOfEach.ToList();
+    }
 
     public static double operator /(Measure a, Measure b)
     {
@@ -27,17 +52,17 @@ public abstract class Measure
 
 public class Mililiter : Measure
 {
-    protected override string MeasureId => "ml";
+    public override string MeasureId => "ml";
 }
 
 public class Gram : Measure
 {
-    protected override string MeasureId => "g";
+    public override string MeasureId => "g";
 }
 
 public class Piece : Measure
 {
-    protected override string MeasureId => "pcs";
+    public override string MeasureId => "pcs";
 }
 
 public static class IntExtensions

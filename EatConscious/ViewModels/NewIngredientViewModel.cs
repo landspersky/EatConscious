@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Avalonia.Controls;
+using EatConscious.Models;
 using ReactiveUI;
 
 namespace EatConscious.ViewModels;
@@ -22,7 +24,7 @@ public class NewIngredientViewModel : ViewModelBase
     public int? Price { get; set; }
     public int? PriceBase { get; set; }
 
-    private List<string> Options { get; } = new() { "g", "ml", "pcs" };
+    private List<string> Options { get; } = Measure.OneOfEach.Select(m => m.MeasureId).ToList();
 
     public string Unit => Options[_unitComboBox.SelectedIndex];
 

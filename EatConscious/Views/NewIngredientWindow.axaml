@@ -46,37 +46,40 @@
                 <Separator />
                 <DockPanel>
                         <TextBlock Text="Kcal" />
-                        <NumericUpDown />
+                        <NumericUpDown Value="{Binding Kcal}"/>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Protein" />
-                        <NumericUpDown />
+                        <NumericUpDown Value="{Binding Protein}"/>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Carbs" />
-                        <NumericUpDown />
+                        <NumericUpDown Value="{Binding Carbs}"/>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Fats" />
-                        <NumericUpDown />
+                        <NumericUpDown Value="{Binding Fats}"/>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Per" FontStyle="Italic"/>
                         <WrapPanel>
-                                <NumericUpDown />
+                                <NumericUpDown Value="{Binding NutrientBase}"/>
                                 <TextBlock Text="{Binding Unit}" />
                         </WrapPanel>
                 </DockPanel>
                 <Separator />
                 <DockPanel>
                         <TextBlock Text="Price" />
-                        <NumericUpDown />
+                        <NumericUpDown Value="{Binding Price}"/>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Per" FontStyle="Italic" />
-                        <TextBox Text="___ G" />
+                        <WrapPanel>
+                                <NumericUpDown Value="{Binding PriceBase}"/>
+                                <TextBlock Text="{Binding Unit}" />
+                        </WrapPanel>
                 </DockPanel>
-                <Button Content="Add" />
+                <Button HorizontalAlignment="Center" Content="Add" Command="{Binding AddClick}"/>
                 
         </StackPanel>
 </Window>

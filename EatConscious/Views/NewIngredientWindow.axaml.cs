@@ -7,10 +7,10 @@ namespace EatConscious.Views;
 
 public partial class NewIngredientWindow : Window
 {
-    public NewIngredientWindow()
+    public NewIngredientWindow(MainWindowViewModel model)
     {
         InitializeComponent();
-        DataContext = new NewIngredientViewModel(this.Find<ComboBox>("SelectUnit"));
+        DataContext = new NewIngredientViewModel(model, this.Find<ComboBox>("SelectUnit"));
 #if DEBUG
         this.AttachDevTools();
 #endif

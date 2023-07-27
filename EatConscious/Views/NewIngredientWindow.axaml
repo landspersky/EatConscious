@@ -1,0 +1,82 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EatConscious.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="EatConscious.Views.NewIngredientWindow"
+        x:DataType="vm:NewIngredientViewModel"
+        Title="NewIngredientWindow">
+        
+        <!-- There is no Design Context since for the model's constructor we need ComboBox defined below -->
+    
+        <Window.Styles>
+                <Style Selector="DockPanel">
+                        <Setter Property="LastChildFill" Value="False" />
+                </Style>
+                <Style Selector="DockPanel TextBlock">
+                        <Setter Property="DockPanel.Dock" Value="Left" />
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="10"/>
+                        <!-- Add any other common properties you want to apply to all TextBlocks within DockPanels -->
+                </Style>
+                <Style Selector="DockPanel NumericUpDown">
+                        <Setter Property="DockPanel.Dock" Value="Right" />
+                        <Setter Property="ShowButtonSpinner" Value="False" />
+                        <Setter Property="Value" Value="0" />
+                </Style>
+                <Style Selector="DockPanel TextBox">
+                        <Setter Property="DockPanel.Dock" Value="Right" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+        </Window.Styles>
+        
+        
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+                <DockPanel>
+                        <TextBlock Text="Name" />
+                        <TextBox Text="{Binding Name}" />
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Unit" />
+                        <!-- <ComboBox Name="SelectUnit" ItemsSource="{Binding Options}" -->
+                        <!--           SelectedIndex="{Binding SelectedIndex}"></ComboBox> -->
+                        <ComboBox Name="SelectUnit" />
+                </DockPanel>
+                <Separator />
+                <DockPanel>
+                        <TextBlock Text="Kcal" />
+                        <NumericUpDown />
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Protein" />
+                        <NumericUpDown />
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Carbs" />
+                        <NumericUpDown />
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Fats" />
+                        <NumericUpDown />
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Per" FontStyle="Italic"/>
+                        <WrapPanel>
+                                <NumericUpDown />
+                                <TextBlock Text="{Binding Unit}" />
+                        </WrapPanel>
+                </DockPanel>
+                <Separator />
+                <DockPanel>
+                        <TextBlock Text="Price" />
+                        <NumericUpDown />
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Per" FontStyle="Italic" />
+                        <TextBox Text="___ G" />
+                </DockPanel>
+                <Button Content="Add" />
+                
+        </StackPanel>
+</Window>

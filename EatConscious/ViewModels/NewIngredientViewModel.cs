@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using EatConscious.Models;
 using ReactiveUI;
 
@@ -15,16 +18,15 @@ public class NewIngredientViewModel : ViewModelBase
     private readonly ComboBox _unitComboBox;
 
     private readonly MainWindowViewModel _mainModel;
-    
-    [Required]
+
     public double Kcal { get; set; }
-    public double Protein { get; set; }
+
+    public double Protein { get; set; } 
     public double Carbs { get; set; }
     public double Fats { get; set; }
-    public double NutrientBase { get; set; }
-    
+    public double NutrientBase { get; set; } = 1;
     public double Price { get; set; }
-    public double PriceBase { get; set; }
+    public double PriceBase { get; set; } = 1;
 
     private List<string> Options { get; } = Measure.OneOfEach.Select(m => m.MeasureId).ToList();
 
@@ -39,11 +41,12 @@ public class NewIngredientViewModel : ViewModelBase
             Carbs = this.Carbs,
             Fats = this.Fats
         };
-        Measure NutrientBaseMeasure = Measure.OneOfEach[_unitComboBox.SelectedIndex];
-        var PriceBaseMeasure = NutrientBaseMeasure;
-        NutrientBaseMeasure.Value = NutrientBase;
-        PriceBaseMeasure.Value = PriceBase;
-        return new Ingredient(Name, nutrients, NutrientBaseMeasure, Price, PriceBaseMeasure);
+        Console.WriteLine(nutrients);
+        Measure nutrientBaseMeasure = Measure.OneOfEach[_unitComboBox.SelectedIndex];
+        var priceBaseMeasure = nutrientBaseMeasure;
+        nutrientBaseMeasure.Value = NutrientBase;
+        priceBaseMeasure.Value = PriceBase;
+        return new Ingredient(Name, nutrients, nutrientBaseMeasure, Price, priceBaseMeasure);
     }
 
     public void AddClick()

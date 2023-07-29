@@ -1,12 +1,15 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:EatConscious.ViewModels"
+        xmlns:controls="using:EatConscious.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="EatConscious.Views.NewIngredientWindow"
         x:DataType="vm:NewIngredientViewModel"
-        Title="NewIngredientWindow">
+        Title="NewIngredientWindow"
+        Width="300"
+        Height="450">
         
         <!-- There is no Design Context since for the model's constructor we need ComboBox defined below -->
     
@@ -18,64 +21,71 @@
                         <Setter Property="DockPanel.Dock" Value="Left" />
                         <Setter Property="VerticalAlignment" Value="Center"/>
                         <Setter Property="Margin" Value="10"/>
-                        <!-- Add any other common properties you want to apply to all TextBlocks within DockPanels -->
                 </Style>
-                <Style Selector="DockPanel NumericUpDown">
+                <Style Selector="DockPanel WrapPanel">
                         <Setter Property="DockPanel.Dock" Value="Right" />
-                        <Setter Property="ShowButtonSpinner" Value="False" />
-                        <Setter Property="Value" Value="0" />
-                </Style>
-                <Style Selector="DockPanel TextBox">
-                        <Setter Property="DockPanel.Dock" Value="Right" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
         </Window.Styles>
         
         
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5" MinWidth="150">
                 <DockPanel>
                         <TextBlock Text="Name" />
-                        <TextBox Text="{Binding Name}" />
+                        <WrapPanel>
+                                <TextBox Text="{Binding Name}" />
+                        </WrapPanel>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Unit" />
                         <!-- <ComboBox Name="SelectUnit" ItemsSource="{Binding Options}" -->
                         <!--           SelectedIndex="{Binding SelectedIndex}"></ComboBox> -->
-                        <ComboBox Name="SelectUnit" />
+                        <WrapPanel>
+                                <ComboBox Name="SelectUnit" SelectedIndex="1" />
+                        </WrapPanel>
                 </DockPanel>
                 <Separator />
                 <DockPanel>
                         <TextBlock Text="Kcal" />
-                        <NumericUpDown Value="{Binding Kcal}"/>
+                        <WrapPanel>
+                                <controls:FeatureInput Value="{Binding Kcal, Mode=OneWayToSource}"/>
+                        </WrapPanel>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Protein" />
-                        <NumericUpDown Value="{Binding Protein}"/>
+                        <WrapPanel>
+                                <controls:FeatureInput Value="{Binding Protein, Mode=OneWayToSource}"/>
+                        </WrapPanel>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Carbs" />
-                        <NumericUpDown Value="{Binding Carbs}"/>
+                        <WrapPanel>
+                                <controls:FeatureInput Value="{Binding Carbs, Mode=OneWayToSource}"/>
+                        </WrapPanel>
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Fats" />
-                        <NumericUpDown Value="{Binding Fats}"/>
+                        <WrapPanel>
+                                <controls:FeatureInput Value="{Binding Fats, Mode=OneWayToSource}"/>
+                        </WrapPanel>
                 </DockPanel>
                 <DockPanel>
-                        <TextBlock Text="Per" FontStyle="Italic"/>
+                        <TextBlock Text="Per"/>
                         <WrapPanel>
-                                <NumericUpDown Value="{Binding NutrientBase}"/>
+                                <controls:BaseInput Value="{Binding NutrientBase, Mode=OneWayToSource}"/>
                                 <TextBlock Text="{Binding Unit}" />
                         </WrapPanel>
                 </DockPanel>
                 <Separator />
                 <DockPanel>
                         <TextBlock Text="Price" />
-                        <NumericUpDown Value="{Binding Price}"/>
+                        <WrapPanel>
+                                <controls:FeatureInput Value="{Binding Price, Mode=OneWayToSource}"/>
+                        </WrapPanel>
                 </DockPanel>
                 <DockPanel>
-                        <TextBlock Text="Per" FontStyle="Italic" />
+                        <TextBlock Text="Per"/>
                         <WrapPanel>
-                                <NumericUpDown Value="{Binding PriceBase}"/>
+                                <controls:BaseInput Value="{Binding PriceBase, Mode=OneWayToSource}"/>
                                 <TextBlock Text="{Binding Unit}" />
                         </WrapPanel>
                 </DockPanel>

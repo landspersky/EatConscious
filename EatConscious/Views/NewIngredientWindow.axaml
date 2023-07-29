@@ -40,7 +40,7 @@
                         <!-- <ComboBox Name="SelectUnit" ItemsSource="{Binding Options}" -->
                         <!--           SelectedIndex="{Binding SelectedIndex}"></ComboBox> -->
                         <WrapPanel>
-                                <ComboBox Name="SelectUnit" SelectedIndex="1" />
+                                <ComboBox Name="SelectUnit"/>
                         </WrapPanel>
                 </DockPanel>
                 <Separator />

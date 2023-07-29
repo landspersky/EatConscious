@@ -42,6 +42,7 @@ public class NewIngredientViewModel : ViewModelBase
             Fats = this.Fats
         };
         Console.WriteLine(nutrients);
+        Console.WriteLine(_unitComboBox.SelectedIndex);
         Measure nutrientBaseMeasure = Measure.OneOfEach[_unitComboBox.SelectedIndex];
         var priceBaseMeasure = nutrientBaseMeasure;
         nutrientBaseMeasure.Value = NutrientBase;
@@ -60,6 +61,7 @@ public class NewIngredientViewModel : ViewModelBase
         _mainModel = mainModel;
         _unitComboBox = unitComboBox;
         unitComboBox.ItemsSource = Options;
+        unitComboBox.SelectedIndex = 0;
         this.WhenAnyValue(m => m._unitComboBox.SelectedIndex)
             .Subscribe(_ => this.RaisePropertyChanged(nameof(Unit)));
     }

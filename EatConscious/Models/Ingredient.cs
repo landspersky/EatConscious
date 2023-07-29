@@ -11,7 +11,7 @@ public record Ingredient
     // TODO: x and y could be of different types
     public static Ingredient Convert(string name, Nutrients nutrientsPerX, Measure x, double pricePerY, Measure y)
     {
-        var baseMeasure = x;
+        var baseMeasure = Measure.GetBase(x);
         var nutrients = nutrientsPerX * (baseMeasure / x);
         var price = pricePerY * (baseMeasure / y);
         return new Ingredient(name, nutrients, price);

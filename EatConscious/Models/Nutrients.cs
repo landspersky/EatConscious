@@ -1,3 +1,5 @@
+using System;
+
 namespace EatConscious.Models;
 
 public record struct Nutrients
@@ -7,16 +9,14 @@ public record struct Nutrients
     public double Carbs { get; init; }
     public double Fats { get; init; }
 
-    public static Nutrients operator *(Nutrients nutrients, double val)
+    public Nutrients Map(Func<double, double> f)
     {
         return new Nutrients()
         {
-            Kcal = nutrients.Kcal * val,
-            Protein = nutrients.Protein * val,
-            Carbs = nutrients.Carbs * val,
-            Fats = nutrients.Fats * val
+            Kcal = f(this.Kcal),
+            Protein = f(this.Protein),
+            Carbs = f(this.Carbs),
+            Fats = f(this.Fats)
         };
     }
-
-    public static Nutrients operator *(double val, Nutrients nutrients) => nutrients * val;
 }

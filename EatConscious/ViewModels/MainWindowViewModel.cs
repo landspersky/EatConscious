@@ -1,22 +1,26 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 using EatConscious.Models;
-using ReactiveUI;
+using EatConscious.Views;
 
 namespace EatConscious.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public List<Measure> Measures { get; set; } = new()
-    {
-        100.ToMeasure<Gram>(),
-        40.ToMeasure<Mililiter>(),
-        3.ToMeasure<Piece>()
-    };
 
     public void Click()
     {
-        Measures.Add(300.ToMeasure<Mililiter>());
-        //this.RaisePropertyChanged(nameof(Measures));
+        var window = new NewIngredientWindow(this);
+        window.Show();
     }
-    
+
+    public List<Ingredient> Ingredients { get; set; } = DeserializeIngredients();
+
+    private static List<Ingredient> DeserializeIngredients()
+    {
+        var ingredientsJson = File.ReadAllText(App.IngredientsPath);
+        var ingredients = JsonSerializer.Deserialize<List<Ingredient>>(ingredientsJson);
+        return ingredients ?? new List<Ingredient>();
+    }
 }

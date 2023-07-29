@@ -41,13 +41,11 @@ public class NewIngredientViewModel : ViewModelBase
             Carbs = this.Carbs,
             Fats = this.Fats
         };
-        Console.WriteLine(nutrients);
-        Console.WriteLine(_unitComboBox.SelectedIndex);
         Measure nutrientBaseMeasure = Measure.OneOfEach[_unitComboBox.SelectedIndex];
         var priceBaseMeasure = nutrientBaseMeasure;
         nutrientBaseMeasure.Value = NutrientBase;
         priceBaseMeasure.Value = PriceBase;
-        return new Ingredient(Name, nutrients, nutrientBaseMeasure, Price, priceBaseMeasure);
+        return Ingredient.Convert(Name, nutrients, nutrientBaseMeasure, Price, priceBaseMeasure);
     }
 
     public void AddClick()

@@ -1,6 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:EatConscious.ViewModels"
+        xmlns:model="using:EatConscious.Models"
+        xmlns:view="using:EatConscious.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -12,16 +14,20 @@
 
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+    
+    <Window.DataTemplates>
+        <DataTemplate DataType="model:Ingredient">
+            <view:IngredientView />
+        </DataTemplate>
+    </Window.DataTemplates>
     
     <TabControl>
         <TabItem Header="Ingredients">
             <StackPanel>
-                <ListBox ItemsSource="{Binding Measures}" SelectionMode="Multiple,Toggle"/>
-                <Button Command="{Binding Click}">Add 300ml</Button>
+                <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle"/>
+                <Button Command="{Binding Click}">Add Ingredient</Button>
             </StackPanel>
         </TabItem>
         <TabItem Header="Recipes">Lorem Ipsum</TabItem>

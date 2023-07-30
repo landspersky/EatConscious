@@ -25,10 +25,18 @@
     
     <TabControl>
         <TabItem Header="Ingredients">
-            <StackPanel>
-                <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle"/>
+            <Grid ColumnDefinitions="*" RowDefinitions="Auto *">
                 <Button Command="{Binding Click}">Add Ingredient</Button>
-            </StackPanel>
+                <ScrollViewer Grid.Row="1">
+                    <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </ScrollViewer>
+            </Grid>
         </TabItem>
         <TabItem Header="Recipes">Lorem Ipsum</TabItem>
     </TabControl>

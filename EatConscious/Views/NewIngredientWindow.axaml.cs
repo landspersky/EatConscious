@@ -1,5 +1,7 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using EatConscious.ViewModels;
 
@@ -10,7 +12,8 @@ public partial class NewIngredientWindow : Window
     public NewIngredientWindow(MainWindowViewModel model)
     {
         InitializeComponent();
-        DataContext = new NewIngredientViewModel(model, this.Find<ComboBox>("SelectUnit"));
+        var ingredientModel = new NewIngredientViewModel(model, this.Find<ComboBox>("SelectUnit"));
+        DataContext = ingredientModel;
 #if DEBUG
         this.AttachDevTools();
 #endif

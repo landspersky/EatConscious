@@ -24,5 +24,20 @@
         <WrapPanel>
             <TextBlock Text="{Binding Price, StringFormat=Price: {0}}" />
         </WrapPanel>
+        <WrapPanel>
+            <ItemsControl ItemsSource="{Binding Tags}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat=#{0} }"></TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+        </WrapPanel>
     </StackPanel>
 </UserControl>

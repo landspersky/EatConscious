@@ -11,8 +11,7 @@
         x:CompileBindings="True"
         Icon="/Assets/avalonia-logo.ico"
         Title="EatConscious">
-
-
+    
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
@@ -28,7 +27,8 @@
             <Grid ColumnDefinitions="*" RowDefinitions="Auto *">
                 <Button Command="{Binding Click}">Add Ingredient</Button>
                 <ScrollViewer Grid.Row="1">
-                    <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle">
+                    <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle"
+                             Selection="{Binding IngredientSelection}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />

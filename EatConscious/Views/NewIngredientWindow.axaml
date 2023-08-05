@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:EatConscious.ViewModels"
         xmlns:controls="using:EatConscious.Controls"
+        xmlns:view="using:EatConscious.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -12,7 +13,7 @@
         Height="450">
         
         <!-- There is no Design Context since for the model's constructor we need ComboBox defined below -->
-    
+        
         <Window.Styles>
                 <Style Selector="DockPanel">
                         <Setter Property="LastChildFill" Value="False" />
@@ -42,6 +43,11 @@
                         <WrapPanel>
                                 <ComboBox Name="SelectUnit"/>
                         </WrapPanel>
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Tags" />
+                        <controls:TagSelector Tags="{Binding ModelTags}"
+                                              SelectedTags="{Binding SelectedTags}"/>
                 </DockPanel>
                 <Separator />
                 <DockPanel>

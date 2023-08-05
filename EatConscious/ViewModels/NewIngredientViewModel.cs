@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Selection;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using EatConscious.Models;
 using ReactiveUI;
@@ -31,6 +33,10 @@ public class NewIngredientViewModel : ViewModelBase
     private List<string> Options { get; } = Measure.OneOfEach.Select(m => m.MeasureId).ToList();
 
     public string Unit => Options[_unitComboBox.SelectedIndex];
+    
+    public List<string> ModelTags { get; } = new() { "meat", "fruit", "veggie" };
+
+    public IReadOnlyList<string> SelectedTags { get; set; } = new List<string>();
 
     public Ingredient CreateIngredient()
     {
@@ -45,7 +51,8 @@ public class NewIngredientViewModel : ViewModelBase
         var priceBaseMeasure = nutrientBaseMeasure;
         nutrientBaseMeasure.Value = NutrientBase;
         priceBaseMeasure.Value = PriceBase;
-        return Ingredient.Convert(Name, nutrients, nutrientBaseMeasure, Price, priceBaseMeasure);
+        return Ingredient.Convert(Name, nutrients, nutrientBaseMeasure, Price, priceBaseMeasure, 
+            SelectedTags.ToList());
     }
 
     public void AddClick()

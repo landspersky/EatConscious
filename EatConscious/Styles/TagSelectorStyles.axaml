@@ -11,13 +11,33 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <DataValidationErrors>
-                    
-                    <StackPanel>
+                    <StackPanel x:DataType="controls:TagSelector">
+                        <!-- regular binding of Tags to set DataContext for ItemTemplate -->
                         <ListBox SelectionMode="Multiple,Toggle"
                                  Selection="{TemplateBinding TagSelection}"
-                                 ItemsSource="{TemplateBinding Tags}"/>
+                                 ItemsSource="{Binding Tags, RelativeSource={RelativeSource TemplatedParent}}"
+                                 Background="Transparent">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" FontSize="12" Margin="0"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Padding" Value="5 5"></Setter>
+                                    <Setter Property="Margin" Value="3 3"></Setter>
+                                    <Setter Property="BorderBrush" Value="Black" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Setter Property="CornerRadius" Value="5" />
+                                </Style>
+                            </ListBox.Styles>
+                        </ListBox>
                     </StackPanel>
-                    
                 </DataValidationErrors>
             </ControlTemplate>
         </Setter>

@@ -34,7 +34,11 @@ public class NewIngredientViewModel : ViewModelBase
 
     public string Unit => Options[_unitComboBox.SelectedIndex];
     
-    public List<string> ModelTags { get; } = new() { "meat", "fruit", "veggie" };
+    public List<string> ModelTags { get; } = new()
+    {
+        "meat", "fruit", "veggie", "spices", "sauce", "drink", 
+        "dairy", "legume", "grain"
+    };
 
     public IReadOnlyList<string> SelectedTags { get; set; } = new List<string>();
 

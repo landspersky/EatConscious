@@ -6,6 +6,13 @@ using Avalonia.Data;
 
 namespace EatConscious.Controls;
 
+/// <summary>
+/// Control for selecting and creating tags
+/// </summary>
+/// <remarks>
+/// The expected use case is <c><TagSelector Tags="{...}" SelectedTags="{...}"/></c>
+/// Other properties are for template binding
+/// </remarks>
 public class TagSelector : TemplatedControl
 {
     public static readonly DirectProperty<TagSelector, List<string>> TagsProperty =
@@ -13,9 +20,9 @@ public class TagSelector : TemplatedControl
             nameof(Tags),
             o => o.Tags,
             (o, v) => o.Tags = v,
-            defaultBindingMode: BindingMode.OneWay);     // the tags should be provided by the model
+            defaultBindingMode: BindingMode.TwoWay);
 
-    // this should not be accessible in the app, only through IDE designer
+    // the default should not be seen in the app, only through IDE designer
     private List<string> _tags = new() {"default", "tags"};
 
     public List<string> Tags

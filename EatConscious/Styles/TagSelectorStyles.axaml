@@ -12,6 +12,16 @@
             <ControlTemplate>
                 <DataValidationErrors>
                     <StackPanel x:DataType="controls:TagSelector">
+                        <StackPanel.Styles>
+                            <!-- makes the hashtags and the input look the same  -->
+                            <Style Selector="ListBoxItem, TextBox">
+                                <Setter Property="Padding" Value="5 5"></Setter>
+                                <Setter Property="Margin" Value="3 3"></Setter>
+                                <Setter Property="BorderBrush" Value="Black" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="CornerRadius" Value="5" />
+                            </Style>
+                        </StackPanel.Styles>
                         <!-- regular binding of Tags to set DataContext for ItemTemplate -->
                         <ListBox SelectionMode="Multiple,Toggle"
                                  Selection="{TemplateBinding TagSelection}"
@@ -27,16 +37,15 @@
                                     <WrapPanel />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
-                            <ListBox.Styles>
-                                <Style Selector="ListBoxItem">
-                                    <Setter Property="Padding" Value="5 5"></Setter>
-                                    <Setter Property="Margin" Value="3 3"></Setter>
-                                    <Setter Property="BorderBrush" Value="Black" />
-                                    <Setter Property="BorderThickness" Value="1" />
-                                    <Setter Property="CornerRadius" Value="5" />
-                                </Style>
-                            </ListBox.Styles>
                         </ListBox>
+                        <DockPanel>
+                            <!-- template binding works only on properties -->
+                            <Button Content="+" Margin="5 0" Command="{Binding AddTag, 
+                            RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Right"/>
+                            <TextBox 
+                                Text="{Binding NewTagName, 
+                            RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Right"/>
+                        </DockPanel>
                     </StackPanel>
                 </DataValidationErrors>
             </ControlTemplate>

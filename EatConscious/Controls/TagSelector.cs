@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
@@ -15,17 +17,17 @@ namespace EatConscious.Controls;
 /// </remarks>
 public class TagSelector : TemplatedControl
 {
-    public static readonly DirectProperty<TagSelector, List<string>> TagsProperty =
-        AvaloniaProperty.RegisterDirect<TagSelector, List<string>>(
+    public static readonly DirectProperty<TagSelector, ObservableCollection<string>> TagsProperty =
+        AvaloniaProperty.RegisterDirect<TagSelector, ObservableCollection<string>>(
             nameof(Tags),
             o => o.Tags,
             (o, v) => o.Tags = v,
             defaultBindingMode: BindingMode.TwoWay);
 
     // the default should not be seen in the app, only through IDE designer
-    private List<string> _tags = new() {"default", "tags"};
+    private ObservableCollection<string> _tags = new() {"default", "tags"};
 
-    public List<string> Tags
+    public ObservableCollection<string> Tags
     {
         get => _tags;
         private set => SetAndRaise(TagsProperty, ref _tags, value);
@@ -53,4 +55,28 @@ public class TagSelector : TemplatedControl
             defaultBindingMode: BindingMode.OneWayToSource); // set through UI, sent to model
     
     public IReadOnlyList<string?> SelectedTags => _tagSelection.SelectedItems;
+
+    public static readonly DirectProperty<TagSelector, string?> NewTagNameProperty =
+        AvaloniaProperty.RegisterDirect<TagSelector, string?>(
+            nameof(NewTagName),
+            o => o.NewTagName,
+            (o, v) => o.NewTagName = v,
+            defaultBindingMode: BindingMode.TwoWay);
+    
+    private string? _newTagName = "new tag";
+
+    public string? NewTagName
+    {
+        get => _newTagName;
+        set => SetAndRaise(NewTagNameProperty, ref _newTagName, value);
+    }
+
+    public void AddTag()
+    {
+        if (NewTagName is not null && !Tags.Contains(NewTagName))
+        {
+            Tags.Add(NewTagName);
+        }
+        NewTagName = "";
+    }
 }

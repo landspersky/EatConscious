@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 
@@ -8,8 +9,8 @@ namespace EatConscious.Models;
 // the tags displayed when creating ingredient. Tag manipulation can be done by editing the json.
 public class IngredientsWrapper
 {
-    public List<string> Tags { get; init; } = new();
-    public List<Ingredient> Ingredients { get; init; } = new();
+    public ObservableCollection<string> Tags { get; init; } = new();
+    public ObservableCollection<Ingredient> Ingredients { get; init; } = new();
 
     public static IngredientsWrapper StateOnLoad = DeserializeIngredients();
 

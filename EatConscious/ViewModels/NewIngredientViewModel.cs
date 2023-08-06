@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
@@ -34,7 +35,7 @@ public class NewIngredientViewModel : ViewModelBase
 
     public string Unit => Options[_unitComboBox.SelectedIndex];
 
-    public List<string> Tags { get; }
+    public ObservableCollection<string> Tags { get; }
 
     public IReadOnlyList<string> SelectedTags { get; set; } = new List<string>();
 

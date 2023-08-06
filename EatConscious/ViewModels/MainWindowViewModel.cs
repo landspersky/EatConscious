@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Avalonia.Controls.Selection;
 using EatConscious.Models;
@@ -16,9 +18,9 @@ public class MainWindowViewModel : ViewModelBase
         window.Show();
     }
 
-    public List<Ingredient> Ingredients { get; init; } = IngredientsWrapper.StateOnLoad.Ingredients;
+    public ObservableCollection<Ingredient> Ingredients { get; init; } = new(IngredientsWrapper.StateOnLoad.Ingredients);
     
-    public List<string> Tags { get; } = IngredientsWrapper.StateOnLoad.Tags;
+    public ObservableCollection<string> Tags { get; } = IngredientsWrapper.StateOnLoad.Tags;
 
     public IngredientsWrapper WrapIngredients() => new IngredientsWrapper()
     {

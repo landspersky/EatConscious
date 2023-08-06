@@ -16,13 +16,15 @@ public class MainWindowViewModel : ViewModelBase
         window.Show();
     }
 
-    public List<Ingredient> Ingredients { get; init; } = DeserializeIngredients();
-    private static List<Ingredient> DeserializeIngredients()
+    public List<Ingredient> Ingredients { get; init; } = IngredientsWrapper.StateOnLoad.Ingredients;
+    
+    public List<string> Tags { get; } = IngredientsWrapper.StateOnLoad.Tags;
+
+    public IngredientsWrapper WrapIngredients() => new IngredientsWrapper()
     {
-        var ingredientsJson = File.ReadAllText(App.IngredientsPath);
-        var ingredients = JsonSerializer.Deserialize<List<Ingredient>>(ingredientsJson);
-        return ingredients ?? new List<Ingredient>();
-    }
+        Tags = this.Tags,
+        Ingredients = this.Ingredients
+    };
 
     public MainWindowViewModel()
     {

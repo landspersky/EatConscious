@@ -35,7 +35,7 @@ public partial class App : Application
 
     private void SerializeData(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-        string json = JsonSerializer.Serialize(_mainModel.Ingredients);
+        string json = JsonSerializer.Serialize(_mainModel.WrapIngredients());
         using (var sw = new StreamWriter(IngredientsPath, false))
         {
             sw.Write(json);

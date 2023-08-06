@@ -33,12 +33,8 @@ public class NewIngredientViewModel : ViewModelBase
     private List<string> Options { get; } = Measure.OneOfEach.Select(m => m.MeasureId).ToList();
 
     public string Unit => Options[_unitComboBox.SelectedIndex];
-    
-    public List<string> ModelTags { get; } = new()
-    {
-        "meat", "fruit", "veggie", "spices", "sauce", "drink", 
-        "dairy", "legume", "grain"
-    };
+
+    public List<string> Tags { get; }
 
     public IReadOnlyList<string> SelectedTags { get; set; } = new List<string>();
 
@@ -73,5 +69,6 @@ public class NewIngredientViewModel : ViewModelBase
         unitComboBox.SelectedIndex = 0;
         this.WhenAnyValue(m => m._unitComboBox.SelectedIndex)
             .Subscribe(_ => this.RaisePropertyChanged(nameof(Unit)));
+        Tags = mainModel.Tags;
     }
 }

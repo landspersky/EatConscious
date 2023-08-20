@@ -1,14 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Selection;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using EatConscious.Models;
 using ReactiveUI;
 
@@ -23,7 +17,6 @@ public class NewIngredientViewModel : ViewModelBase
     private readonly MainWindowViewModel _mainModel;
 
     public double Kcal { get; set; }
-
     public double Protein { get; set; } 
     public double Carbs { get; set; }
     public double Fats { get; set; }
@@ -31,6 +24,9 @@ public class NewIngredientViewModel : ViewModelBase
     public double Price { get; set; }
     public double PriceBase { get; set; } = 1;
 
+    /// <summary>
+    /// Text representation for each unit
+    /// </summary>
     private List<string> Options { get; } = Measure.OneOfEach.Select(m => m.MeasureId).ToList();
 
     public string Unit => Options[_unitComboBox.SelectedIndex];
@@ -38,8 +34,9 @@ public class NewIngredientViewModel : ViewModelBase
     public ObservableCollection<string> Tags { get; }
 
     public IReadOnlyList<string> SelectedTags { get; set; } = new List<string>();
-
-    public Ingredient CreateIngredient()
+    
+    /// <returns>Ingredient created from the input fields data</returns>
+    private Ingredient CreateIngredient()
     {
         Nutrients nutrients = new()
         {

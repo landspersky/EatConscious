@@ -12,7 +12,8 @@ public abstract class Measure
 
     public abstract string MeasureId { get; }
     
-    // all ingredients have info per these measures
+    /// <returns>Base measure based on the type of measure.
+    /// Data in Ingredients are calculated per this measure.</returns>
     public static Measure GetBase(Measure m)
     {
         return m switch
@@ -24,8 +25,10 @@ public abstract class Measure
         };
     }
 
-    // 1 X for each class X derived from Measure ie. [1 g, 1 ml,...]
-    public static List<Measure> OneOfEach = GetOneOfEach();
+    /// <summary>
+    /// 1 X for each class X derived from Measure ie. [1 g, 1 ml,...]
+    /// </summary>
+    public static readonly List<Measure> OneOfEach = GetOneOfEach();
     
     private static List<Measure> GetOneOfEach()
     {

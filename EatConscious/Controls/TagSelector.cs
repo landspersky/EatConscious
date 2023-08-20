@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Avalonia;
@@ -12,8 +11,9 @@ namespace EatConscious.Controls;
 /// Control for selecting and creating tags
 /// </summary>
 /// <remarks>
-/// The expected use case is <c><TagSelector Tags="{...}" SelectedTags="{...}"/></c>
-/// Other properties are for template binding
+/// The expected use case is
+/// <code>&lt;TagSelector Tags="{...}" SelectedTags="{...}"/&gt;</code>
+/// Other properties are for template binding in the style
 /// </remarks>
 public class TagSelector : TemplatedControl
 {

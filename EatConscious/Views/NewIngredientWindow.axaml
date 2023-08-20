@@ -38,9 +38,8 @@
                 </DockPanel>
                 <DockPanel>
                         <TextBlock Text="Unit" />
-                        <!-- <ComboBox Name="SelectUnit" ItemsSource="{Binding Options}" -->
-                        <!--           SelectedIndex="{Binding SelectedIndex}"></ComboBox> -->
                         <WrapPanel>
+                                <!-- the logic is handled in the view model based on the name -->
                                 <ComboBox Name="SelectUnit"/>
                         </WrapPanel>
                 </DockPanel>

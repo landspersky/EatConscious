@@ -25,7 +25,7 @@
     <TabControl>
         <TabItem Header="Ingredients">
             <Grid ColumnDefinitions="*" RowDefinitions="Auto *">
-                <Button Command="{Binding Click}">Add Ingredient</Button>
+                <Button Command="{Binding AddIngredientClick}">Add Ingredient</Button>
                 <ScrollViewer Grid.Row="1">
                     <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle"
                              Selection="{Binding IngredientSelection}">

@@ -6,9 +6,15 @@ using Avalonia.Interactivity;
 
 namespace EatConscious.Controls;
 
+/// <summary>
+/// Custom text control for numeric input
+/// </summary>
+/// <remarks>
+/// The text value is converted to double on lost focus
+/// </remarks>
 public class NumericInput : TextBox
 {
-    public static readonly double CommonMaximum = 9_999;
+    private static readonly double CommonMaximum = 9_999;
     public static readonly StyledProperty<double> ValueProperty =
         AvaloniaProperty.Register<NumericInput, double>(nameof(Value));
 
@@ -39,10 +45,13 @@ public class NumericInput : TextBox
         Value = min;
         Text = Value.ToString(CultureInfo.InvariantCulture);
         Min = min;
-        Max = NumericInput.CommonMaximum;
+        Max = CommonMaximum;
     }
 }
 
+/// <summary>
+/// Text control for inputting ingredients features (kcal, nutrients, price)
+/// </summary>
 public class FeatureInput : NumericInput
 {
     public FeatureInput() : base(0)
@@ -50,6 +59,9 @@ public class FeatureInput : NumericInput
     }
 }
 
+/// <summary>
+/// Text control for inputting ingredients base measures
+/// </summary>
 public class BaseInput : NumericInput
 {
     // we divide it so it cannot be 0

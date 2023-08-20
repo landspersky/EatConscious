@@ -3,17 +3,25 @@ using System.Collections.Generic;
 
 namespace EatConscious.Models;
 
-public record Ingredient
+public class Ingredient
 {
     public string Name { get; init; }
     
-    // these data are relative to the base measure in BaseMeasures
+    /// <summary>
+    /// <see cref="Nutrients"/> for respective base <see cref="Measure"/> in <see cref="Measure.OneOfEach"/>
+    /// </summary>
     public Nutrients Nutrients { get; set; }
+    /// <summary>
+    /// Price for respective base <see cref="Measure"/> in <see cref="Measure.OneOfEach"/>
+    /// </summary>
     public double Price { get; init; }
 
     public List<string> Tags { get; init; } = new();
 
     // TODO: x and y could be of different types
+    /// <summary>
+    /// The go-to method of creating new ingredient
+    /// </summary>
     public static Ingredient Convert(string name, 
         Nutrients nutrientsPerX, Measure x, 
         double pricePerY, Measure y,
@@ -24,8 +32,10 @@ public record Ingredient
         var price = pricePerY * (baseMeasure / y);
         return new Ingredient(name, nutrients.Map(n => Math.Round(n, 2)), Math.Round(price, 2)) {Tags = tags};
     }
-
-    // the constructor has to be public, because JsonSerializer uses it
+    
+    /// <summary>
+    /// The default constructor used by the JsonSeriarializer, please use <see cref="Convert"/>
+    /// </summary>
     public Ingredient(string name, Nutrients nutrients, double price)
     {
         Name = name;

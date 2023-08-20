@@ -22,7 +22,7 @@
                                 <Setter Property="CornerRadius" Value="5" />
                             </Style>
                         </StackPanel.Styles>
-                        <!-- regular binding of Tags to set DataContext for ItemTemplate -->
+                        <!-- TemplateBinding cannot infer DataContext so it has to be rewritten for Tags -->
                         <ListBox SelectionMode="Multiple,Toggle"
                                  Selection="{TemplateBinding TagSelection}"
                                  ItemsSource="{Binding Tags, RelativeSource={RelativeSource TemplatedParent}}"
@@ -39,7 +39,7 @@
                             </ListBox.ItemsPanel>
                         </ListBox>
                         <DockPanel>
-                            <!-- template binding works only on properties -->
+                            <!-- TemplateBinding works only on properties -->
                             <Button Content="+" Margin="5 0" Command="{Binding AddTag, 
                             RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Right"/>
                             <TextBox 

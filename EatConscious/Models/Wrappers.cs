@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -24,8 +25,17 @@ public class IngredientsWrapper
     /// </summary>
     private static IngredientsWrapper DeserializeIngredients()
     {
-        var ingredientsJson = File.ReadAllText(App.IngredientsPath);
-        var ingredientsWrapper = JsonSerializer.Deserialize<IngredientsWrapper>(ingredientsJson);
-        return ingredientsWrapper ?? new();
+        IngredientsWrapper output;
+        try
+        {
+            string ingredientsJson = File.ReadAllText(App.IngredientsPath);
+            output = JsonSerializer.Deserialize<IngredientsWrapper>(ingredientsJson) ?? new();
+        }
+        catch (Exception ex)
+        {
+            output = new();
+        }
+
+        return output;
     }
 }

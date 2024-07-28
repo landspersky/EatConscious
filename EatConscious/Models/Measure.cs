@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
 
 namespace EatConscious.Models;
 
@@ -30,6 +27,8 @@ public class Measure
         yield return Mililiter;
         yield return Piece;
     }
+
+    public static Measure ById(string id) => All().Single(x => x.Id == id);
 
     public override string ToString() => Name;
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using Avalonia.Controls;
 using EatConscious.Models;
 using ReactiveUI;
@@ -11,8 +12,6 @@ namespace EatConscious.ViewModels;
 public class NewIngredientViewModel : ViewModelBase
 {
     public string Name { get; set; } = "Onion";
-    // get the unit
-    private readonly ComboBox _unitComboBox;
 
     private readonly MainWindowViewModel _mainModel;
 
@@ -23,14 +22,11 @@ public class NewIngredientViewModel : ViewModelBase
     public double NutrientBase { get; set; } = 1;
     public double Price { get; set; }
     public double PriceBase { get; set; } = 1;
+    
+    public List<Measure> Units { get; set; } = Measure.All().ToList();
 
-    /// <summary>
-    /// Text representation for each unit
-    /// </summary>
-    private List<string> Options { get; } = Measure.OneOfEach.Select(m => m.MeasureId).ToList();
-
-    public string Unit => Options[_unitComboBox.SelectedIndex];
-
+    public Measure SelectedUnit { get; set; } = Measure.Gram;
+    
     public ObservableCollection<string> Tags { get; }
 
     public IReadOnlyList<string> SelectedTags { get; set; } = new List<string>();
@@ -40,17 +36,13 @@ public class NewIngredientViewModel : ViewModelBase
     {
         Nutrients nutrients = new()
         {
-            Kcal = this.Kcal,
-            Protein = this.Protein,
-            Carbs = this.Carbs,
-            Fats = this.Fats
+            Kcal = Kcal,
+            Protein = Protein,
+            Carbs = Carbs,
+            Fats = Fats
         };
-        Measure nutrientBaseMeasure = Measure.OneOfEach[_unitComboBox.SelectedIndex];
-        var priceBaseMeasure = nutrientBaseMeasure;
-        nutrientBaseMeasure.Value = NutrientBase;
-        priceBaseMeasure.Value = PriceBase;
-        return Ingredient.Convert(Name, nutrients, nutrientBaseMeasure, Price, priceBaseMeasure, 
-            SelectedTags.ToList());
+        return Ingredient.Convert(
+            Name, nutrients, NutrientBase, Price, PriceBase, SelectedUnit, SelectedTags.ToList());
     }
 
     public void AddClick()
@@ -59,14 +51,9 @@ public class NewIngredientViewModel : ViewModelBase
         _mainModel.RaisePropertyChanged(nameof(_mainModel.Ingredients));
     }
 
-    public NewIngredientViewModel(MainWindowViewModel mainModel, ComboBox unitComboBox)
+    public NewIngredientViewModel(MainWindowViewModel mainModel)
     {
         _mainModel = mainModel;
-        _unitComboBox = unitComboBox;
-        unitComboBox.ItemsSource = Options;
-        unitComboBox.SelectedIndex = 0;
-        this.WhenAnyValue(m => m._unitComboBox.SelectedIndex)
-            .Subscribe(_ => this.RaisePropertyChanged(nameof(Unit)));
         Tags = mainModel.Tags;
     }
 }

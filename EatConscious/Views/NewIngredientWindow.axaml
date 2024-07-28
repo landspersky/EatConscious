@@ -12,7 +12,9 @@
         Width="300"
         Height="450">
         
-        <!-- There is no Design Context since for the model's constructor we need ComboBox defined below -->
+        <Design.DataContext>
+                <vm:MainWindowViewModel/>
+        </Design.DataContext>
         
         <Window.Styles>
                 <Style Selector="DockPanel">
@@ -39,8 +41,9 @@
                 <DockPanel>
                         <TextBlock Text="Unit" />
                         <WrapPanel>
-                                <!-- the logic is handled in the view model based on the name -->
-                                <ComboBox Name="SelectUnit"/>
+                                <ComboBox ItemsSource="{Binding Units}"
+                                          DisplayMemberBinding="{Binding Name}"
+                                          SelectedItem="{Binding SelectedUnit, Mode=TwoWay}"/>
                         </WrapPanel>
                 </DockPanel>
                 <DockPanel>
@@ -79,7 +82,7 @@
                         <TextBlock Text="Per"/>
                         <WrapPanel>
                                 <controls:BaseInput Value="{Binding NutrientBase, Mode=OneWayToSource}"/>
-                                <TextBlock Text="{Binding Unit}" />
+                                <TextBlock Text="{Binding SelectedUnit.Id}" />
                         </WrapPanel>
                 </DockPanel>
                 <Separator />
@@ -93,7 +96,7 @@
                         <TextBlock Text="Per"/>
                         <WrapPanel>
                                 <controls:BaseInput Value="{Binding PriceBase, Mode=OneWayToSource}"/>
-                                <TextBlock Text="{Binding Unit}" />
+                                <TextBlock Text="{Binding SelectedUnit.Id}" />
                         </WrapPanel>
                 </DockPanel>
                 <Button HorizontalAlignment="Center" Content="Add" Command="{Binding AddClick}"/>

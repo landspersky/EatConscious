@@ -23,9 +23,14 @@ public class NewIngredientViewModel : ViewModelBase
     public double Price { get; set; }
     public double PriceBase { get; set; } = 1;
     
-    public List<Measure> Units { get; set; } = Measure.All().ToList();
+    public List<Measure> Units => Measure.All().ToList();
 
-    public Measure SelectedUnit { get; set; } = Measure.Gram;
+    private Measure _selectedUnit = Measure.Gram;
+    public Measure SelectedUnit
+    {
+        get => _selectedUnit;
+        set => this.RaiseAndSetIfChanged(ref _selectedUnit, value);
+    }
     
     public ObservableCollection<string> Tags { get; }
 
@@ -45,11 +50,7 @@ public class NewIngredientViewModel : ViewModelBase
             Name, nutrients, NutrientBase, Price, PriceBase, SelectedUnit, SelectedTags.ToList());
     }
 
-    public void AddClick()
-    {
-        _mainModel.Ingredients.Add(CreateIngredient());
-        _mainModel.RaisePropertyChanged(nameof(_mainModel.Ingredients));
-    }
+    public void AddClick() => _mainModel.Ingredients.Add(CreateIngredient());
 
     public NewIngredientViewModel(MainWindowViewModel mainModel)
     {

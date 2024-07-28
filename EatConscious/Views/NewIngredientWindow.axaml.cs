@@ -12,7 +12,7 @@ public partial class NewIngredientWindow : Window
     public NewIngredientWindow(MainWindowViewModel model)
     {
         InitializeComponent();
-        var ingredientModel = new NewIngredientViewModel(model, this.Find<ComboBox>("SelectUnit"));
+        var ingredientModel = new NewIngredientViewModel(model);
         DataContext = ingredientModel;
 #if DEBUG
         this.AttachDevTools();

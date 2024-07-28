@@ -1,9 +1,35 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 using Avalonia.Controls.Selection;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using EatConscious.Models;
 using EatConscious.Views;
 
 namespace EatConscious.ViewModels;
+
+/// <summary>
+/// Displays nicely the base value from <see cref="Measure"/>
+/// </summary>
+public class MeasureStringConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is Measure unit)
+        {
+            return $"per {unit.BaseValue}{unit.Id}";
+        }
+        return new BindingNotification(new InvalidCastException(),
+            BindingErrorType.Error);;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
 
 public class MainWindowViewModel : ViewModelBase
 {
@@ -18,7 +44,7 @@ public class MainWindowViewModel : ViewModelBase
         window.Show();
     }
 
-    public ObservableCollection<Ingredient> Ingredients { get; init; } = new(IngredientsWrapper.StateOnLoad.Ingredients);
+    public ObservableCollection<Ingredient> Ingredients { get; init; } = new(IngredientsWrapper.StateOnLoad.UnwrapIngredients());
     
     /// <summary>
     /// These tags are shown when creating new ingredient, they do not limit already existing ones
@@ -26,11 +52,22 @@ public class MainWindowViewModel : ViewModelBase
     public ObservableCollection<string> Tags { get; } = IngredientsWrapper.StateOnLoad.Tags;
 
     /// <summary>
-    /// Serializes ingredients and tags from the model
+    /// Serializes tags and ingredients grouped by unit
     /// </summary>
-    public IngredientsWrapper WrapIngredients() => new IngredientsWrapper()
+    public IngredientsWrapper WrapIngredients()
     {
-        Tags = this.Tags,
-        Ingredients = this.Ingredients
-    };
+        var ingredientGroups = Ingredients
+            .GroupBy(x => x.Unit.Id)
+            .Select(g => new IngredientsWrapper.IngredientsWithMeasure()
+            {
+                Unit = g.Key,
+                List = g.Select(x => x.Strip()).ToList()
+            });
+        
+        return new IngredientsWrapper()
+        {
+            Tags = Tags,
+            Ingredients = ingredientGroups.ToList()
+        };
+    }
 }

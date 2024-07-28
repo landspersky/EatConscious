@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:model="using:EatConscious.Models"
+             xmlns:vm="using:EatConscious.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EatConscious.Views.IngredientView"
              x:DataType="model:Ingredient">
@@ -13,6 +14,10 @@
         </Style>
     </UserControl.Styles>
     
+    <UserControl.Resources>
+        <vm:MeasureStringConverter x:Key="MeasureStringConverter"/>
+    </UserControl.Resources>
+    
     <StackPanel>
         <TextBlock FontWeight="Bold" Text="{Binding Name}" FontSize="16"/>
         <WrapPanel DataContext="{Binding Nutrients}">
@@ -21,9 +26,12 @@
             <TextBlock Text="{Binding Fats, StringFormat=Fats: {0}}" />
             <TextBlock Text="{Binding Kcal, StringFormat=Kcal: {0}}" />
         </WrapPanel>
-        <WrapPanel>
-            <TextBlock Text="{Binding Price, StringFormat=Price: {0}}" />
-        </WrapPanel>
+        <DockPanel>
+            <TextBlock Text="{Binding Price, StringFormat=Price: {0}}" DockPanel.Dock="Left"/>
+            <TextBlock Text="{Binding Unit, Converter={StaticResource MeasureStringConverter}}"
+                       TextAlignment="Right"
+                       DockPanel.Dock="Right"/>
+        </DockPanel>
         <WrapPanel>
             <ItemsControl ItemsSource="{Binding Tags}">
                 <ItemsControl.ItemsPanel>

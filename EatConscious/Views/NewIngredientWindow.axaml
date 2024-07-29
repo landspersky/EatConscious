@@ -49,8 +49,8 @@
                 <DockPanel>
                         <TextBlock Text="Tags" VerticalAlignment="Top"/>
                         <WrapPanel>
-                                <controls:TagSelector Tags="{Binding Tags}"
-                                                      SelectedTags="{Binding SelectedTags}"/>
+                                <controls:TagSelector ItemsSource="{Binding Tags}"
+                                                      SelectedItems="{Binding SelectedTags}"/>
                         </WrapPanel>
                 </DockPanel>
                 <Separator />

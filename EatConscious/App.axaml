@@ -13,5 +13,6 @@
         <FluentTheme/>
         <StyleInclude Source="/Styles/TagSelectorStyles.axaml" />
         <StyleInclude Source="/Styles/SelectorStyles.axaml"/>
+        <StyleInclude Source="/Styles/PopupSelectorStyles.axaml"/>
     </Application.Styles>
 </Application>

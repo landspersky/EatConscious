@@ -1,0 +1,32 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:EatConscious.Controls">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <controls:PopupSelector />
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|PopupSelector">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DataValidationErrors>
+                    <StackPanel x:DataType="controls:PopupSelector">
+                        <DropDownButton Content="{TemplateBinding Content}"
+                                        Command="{Binding Click, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        <Popup IsOpen="{Binding DropdownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                               Placement="BottomEdgeAlignedLeft">
+                            <Border Background="White"
+                                    BorderBrush="Gray"
+                                    BorderThickness="1"
+                                    HorizontalAlignment="Left">
+                                <controls:Selector ItemsSource="{TemplateBinding ItemsSource}"
+                                                    Background="LightGray"/>
+                            </Border>
+                        </Popup>
+                    </StackPanel>
+                </DataValidationErrors>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

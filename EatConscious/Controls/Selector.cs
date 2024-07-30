@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Selection;
 using Avalonia.Data;
 
 namespace EatConscious.Controls;
@@ -23,29 +21,17 @@ public class Selector : TemplatedControl
         private set => SetAndRaise(ItemsSourceProperty, ref _itemsSource, value);
     }
     
-    /// <summary>
-    /// This is for the template, use SelectedItems
-    /// </summary>
-    public static readonly DirectProperty<Selector, SelectionModel<string>> SelectionProperty =
-        AvaloniaProperty.RegisterDirect<Selector, SelectionModel<string>>(
-            nameof(ItemsSource),
-            o => o.Selection,
-            (o, v) => o.Selection = v,
-            defaultBindingMode: BindingMode.OneTime);
-    
-    
-    private SelectionModel<string> _selection = new () {SingleSelect = false};
-    public SelectionModel<string> Selection
-    {
-        get => _selection;
-        private set => SetAndRaise(SelectionProperty, ref _selection, value);
-    }
-    
-    public static readonly DirectProperty<Selector, IReadOnlyList<string?>> SelectedItemsProperty =
-        AvaloniaProperty.RegisterDirect<Selector, IReadOnlyList<string?>>(
+    public static readonly DirectProperty<Selector, ObservableCollection<string>> SelectedItemsProperty =
+        AvaloniaProperty.RegisterDirect<Selector, ObservableCollection<string>>(
             nameof(SelectedItems),
             o => o.SelectedItems,
-            defaultBindingMode: BindingMode.OneWayToSource); // set through UI, sent to model
-    
-    public IReadOnlyList<string?> SelectedItems => _selection.SelectedItems;
+            (o, v) => o.SelectedItems = v,
+            defaultBindingMode: BindingMode.OneWayToSource);
+
+    private ObservableCollection<string> _selectedItems = ["one"];
+    public ObservableCollection<string> SelectedItems
+    {
+        get => _selectedItems;
+        set => SetAndRaise(SelectedItemsProperty, ref _selectedItems, value);
+    }
 }

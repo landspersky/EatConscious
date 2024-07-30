@@ -21,7 +21,8 @@
                                     BorderThickness="1"
                                     HorizontalAlignment="Left">
                                 <controls:Selector ItemsSource="{TemplateBinding ItemsSource}"
-                                                    Background="LightGray"/>
+                                                   SelectedItems="{TemplateBinding SelectedItems}"
+                                                   Background="LightGray"/>
                             </Border>
                         </Popup>
                     </StackPanel>

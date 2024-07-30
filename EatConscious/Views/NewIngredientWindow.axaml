@@ -50,7 +50,7 @@
                         <TextBlock Text="Tags" VerticalAlignment="Top"/>
                         <WrapPanel>
                                 <controls:TagSelector ItemsSource="{Binding Tags}"
-                                                      SelectedItems="{Binding SelectedTags}"/>
+                                                      SelectedItems="{Binding SelectedTags, Mode=OneWayToSource}"/>
                         </WrapPanel>
                 </DockPanel>
                 <Separator />

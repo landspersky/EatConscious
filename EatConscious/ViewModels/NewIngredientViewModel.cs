@@ -34,7 +34,7 @@ public class NewIngredientViewModel : ViewModelBase
     
     public ObservableCollection<string> Tags { get; }
 
-    public IReadOnlyList<string> SelectedTags { get; set; } = new List<string>();
+    public ObservableCollection<string> SelectedTags { get; set; }
     
     /// <returns>Ingredient created from the input fields data</returns>
     private Ingredient CreateIngredient()

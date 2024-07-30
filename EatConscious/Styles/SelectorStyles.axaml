@@ -22,9 +22,9 @@
                                 <Setter Property="CornerRadius" Value="5" />
                             </Style>
                         </StackPanel.Styles>
-                        <!-- TemplateBinding cannot infer DataContext so it has to be rewritten -->
+                        <!-- TemplateBinding cannot infer DataContext hence the lengthy binding -->
                         <ListBox SelectionMode="Multiple,Toggle"
-                                 Selection="{TemplateBinding Selection}"
+                                 SelectedItems="{TemplateBinding SelectedItems}"
                                  ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
                                  Background="Transparent">
                             <ListBox.ItemTemplate>

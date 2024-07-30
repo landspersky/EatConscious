@@ -33,16 +33,13 @@ public class MeasureStringConverter : IValueConverter
 
 public class MainWindowViewModel : ViewModelBase
 {
-    /// <summary>
-    /// TODO: Utilize in the future or redo
-    /// cool methods like Select(index)...
-    /// </summary>
-    public SelectionModel<Ingredient> IngredientSelection { get; } = new();
     public void AddIngredientClick()
     {
         var window = new NewIngredientWindow(this);
         window.Show();
     }
+
+    public ObservableCollection<string> FilteredTags { get; set; } = new();
 
     public ObservableCollection<Ingredient> Ingredients { get; init; } = new(IngredientsWrapper.StateOnLoad.UnwrapIngredients());
     

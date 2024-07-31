@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Linq;
-using Avalonia.Controls;
 using EatConscious.Models;
 using ReactiveUI;
 
@@ -34,7 +32,7 @@ public class NewIngredientViewModel : ViewModelBase
     
     public ObservableCollection<string> Tags { get; }
 
-    public ObservableCollection<string> SelectedTags { get; set; }
+    public ObservableCollection<string> SelectedTags { get; set; } = new();
     
     /// <returns>Ingredient created from the input fields data</returns>
     private Ingredient CreateIngredient()
@@ -50,7 +48,7 @@ public class NewIngredientViewModel : ViewModelBase
             Name, nutrients, NutrientBase, Price, PriceBase, SelectedUnit, SelectedTags.ToList());
     }
 
-    public void AddClick() => _mainModel.Ingredients.Add(CreateIngredient());
+    public void AddClick() => _mainModel.AddOrUpdate(CreateIngredient());
 
     public NewIngredientViewModel(MainWindowViewModel mainModel)
     {

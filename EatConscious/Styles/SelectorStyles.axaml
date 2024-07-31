@@ -6,6 +6,10 @@
             <controls:Selector />
         </Border>
     </Design.PreviewWith>
+        
+    <Styles.Resources>
+        <controls:BoolSelectionModeConverter x:Key="BoolSelectionModeConverter"/>
+    </Styles.Resources>
 
     <Style Selector="controls|Selector">
         <Setter Property="Template">
@@ -23,7 +27,7 @@
                             </Style>
                         </StackPanel.Styles>
                         <!-- TemplateBinding cannot infer DataContext hence the lengthy binding -->
-                        <ListBox SelectionMode="Multiple,Toggle"
+                        <ListBox SelectionMode="{Binding SingleSelect, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolSelectionModeConverter}}"
                                  SelectedItems="{TemplateBinding SelectedItems}"
                                  ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
                                  Background="Transparent">

@@ -13,7 +13,8 @@
                 <DataValidationErrors>
                     <StackPanel x:DataType="controls:TagSelector">
                         <controls:Selector ItemsSource="{TemplateBinding ItemsSource}"
-                                           SelectedItems="{TemplateBinding SelectedItems}"/>
+                                           SelectedItems="{TemplateBinding SelectedItems}"
+                                           SingleSelect="{TemplateBinding SingleSelect}"/>
                         <DockPanel>
                             <Button Content="+" Margin="5 0" Command="{Binding AddTag, 
                             RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Right"/>

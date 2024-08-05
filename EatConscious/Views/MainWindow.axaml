@@ -25,14 +25,20 @@
     
     <TabControl>
         <TabItem Header="Ingredients">
-            <Grid ColumnDefinitions="Auto *" RowDefinitions="Auto *">
+            <Grid ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
                 <Button Command="{Binding AddIngredientClick}">Add Ingredient</Button>
                 
-                <controls:PopupSelector Grid.Row="0" Grid.Column="1" 
+                <controls:PopupSelector Grid.Row="0" Grid.Column="1"
                                         Content="Filter"
                                         ItemsSource="{Binding Tags}"
                                         SelectedItems="{Binding FilteredTags}"/>
-                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <controls:PopupSelector Grid.Row="0" Grid.Column="2"
+                                        Content="Sort"
+                                        ItemsSource="{Binding SortOptions}"
+                                        SelectedItems="{Binding SelectedSorting}"
+                                        SingleSelect="True"/>
+                
+                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
                     <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>

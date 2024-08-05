@@ -52,7 +52,7 @@ public class Selector : TemplatedControl
             (o, v) => o.SelectedItems = v,
             defaultBindingMode: BindingMode.OneWayToSource);
 
-    private ObservableCollection<string> _selectedItems = ["one"];
+    private ObservableCollection<string> _selectedItems = new();
     public ObservableCollection<string> SelectedItems
     {
         get => _selectedItems;

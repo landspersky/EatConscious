@@ -5,6 +5,7 @@
         xmlns:view="using:EatConscious.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:EatConscious.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="EatConscious.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -24,11 +25,21 @@
     
     <TabControl>
         <TabItem Header="Ingredients">
-            <Grid ColumnDefinitions="*" RowDefinitions="Auto *">
+            <Grid ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
                 <Button Command="{Binding AddIngredientClick}">Add Ingredient</Button>
-                <ScrollViewer Grid.Row="1">
-                    <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle"
-                             Selection="{Binding IngredientSelection}">
+                
+                <controls:PopupSelector Grid.Row="0" Grid.Column="1"
+                                        Content="Filter"
+                                        ItemsSource="{Binding Tags}"
+                                        SelectedItems="{Binding FilteredTags}"/>
+                <controls:PopupSelector Grid.Row="0" Grid.Column="2"
+                                        Content="Sort"
+                                        ItemsSource="{Binding SortOptions}"
+                                        SelectedItems="{Binding SelectedSorting}"
+                                        SingleSelect="True"/>
+                
+                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                    <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />

@@ -12,34 +12,10 @@
             <ControlTemplate>
                 <DataValidationErrors>
                     <StackPanel x:DataType="controls:TagSelector">
-                        <StackPanel.Styles>
-                            <!-- makes the hashtags and the input look the same  -->
-                            <Style Selector="ListBoxItem, TextBox">
-                                <Setter Property="Padding" Value="5 5"></Setter>
-                                <Setter Property="Margin" Value="3 3"></Setter>
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="BorderThickness" Value="1" />
-                                <Setter Property="CornerRadius" Value="5" />
-                            </Style>
-                        </StackPanel.Styles>
-                        <!-- TemplateBinding cannot infer DataContext so it has to be rewritten for Tags -->
-                        <ListBox SelectionMode="Multiple,Toggle"
-                                 Selection="{TemplateBinding TagSelection}"
-                                 ItemsSource="{Binding Tags, RelativeSource={RelativeSource TemplatedParent}}"
-                                 Background="Transparent">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}" FontSize="12" Margin="0"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                        </ListBox>
+                        <controls:Selector ItemsSource="{TemplateBinding ItemsSource}"
+                                           SelectedItems="{TemplateBinding SelectedItems}"
+                                           SingleSelect="{TemplateBinding SingleSelect}"/>
                         <DockPanel>
-                            <!-- TemplateBinding works only on properties -->
                             <Button Content="+" Margin="5 0" Command="{Binding AddTag, 
                             RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Right"/>
                             <TextBox 

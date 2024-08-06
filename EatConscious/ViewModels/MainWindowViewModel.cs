@@ -140,6 +140,14 @@ public class MainWindowViewModel : ViewModelBase
     public ReadOnlyObservableCollection<Recipe> Recipes => _recipes;
 
     public ObservableCollection<string> RecipeTags { get; } = new(State.OnLoad.RecipeTags);
+    
+    public void AddOrUpdate(Recipe recipe) => _recipeCache.AddOrUpdate(recipe);
+
+    public void AddRecipeClick()
+    {
+        var window = new NewRecipeWindow(this);
+        window.Show();
+    }
 
 
     #endregion

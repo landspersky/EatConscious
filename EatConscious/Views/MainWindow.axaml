@@ -54,7 +54,7 @@
         </TabItem>
         <TabItem Header="Recipes">
             <Grid ColumnDefinitions="Auto *" RowDefinitions="Auto *">
-                <Button>Add recipe</Button>
+                <Button Command="{Binding AddRecipeClick}">Add recipe</Button>
                 
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                     <ListBox ItemsSource="{Binding Recipes}" SelectionMode="Multiple,Toggle">

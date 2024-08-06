@@ -37,7 +37,7 @@ public class MainWindowViewModel : ViewModelBase
 {
     public MainWindowViewModel()
     {
-        _sourceCache.AddOrUpdate(IngredientsWrapper.StateOnLoad.UnwrapIngredients());
+        _sourceCache.AddOrUpdate(State.OnLoad.Ingredients);
         
         _sourceCache.Connect()
                     .Bind(out _ingredients)
@@ -72,7 +72,7 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// These tags are shown when creating new ingredient, they do not limit already existing ones
     /// </summary>
-    public ObservableCollection<string> Tags { get; } = IngredientsWrapper.StateOnLoad.Tags;
+    public ObservableCollection<string> Tags { get; } = new(State.OnLoad.IngredientTags);
     
     /// <summary>
     /// Kategorie, podle kterých lze třídit
@@ -135,7 +135,7 @@ public class MainWindowViewModel : ViewModelBase
         
         return new IngredientsWrapper()
         {
-            Tags = Tags,
+            Tags = Tags.ToList(),
             Ingredients = ingredientGroups.ToList()
         };
     }

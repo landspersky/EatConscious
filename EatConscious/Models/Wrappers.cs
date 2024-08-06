@@ -13,14 +13,14 @@ namespace EatConscious.Models;
 /// </summary>
 public class IngredientsWrapper
 {
-    public ObservableCollection<string> Tags { get; init; } = new();
+    public List<string> Tags { get; init; } = new();
     public List<IngredientsWithMeasure> Ingredients { get; init; } = new();
 
     /// <summary>
     /// Data deserialized on the app start
     /// </summary>
     public static IngredientsWrapper StateOnLoad = DeserializeIngredients();
-
+    
     /// <summary>
     /// Reads the input ingredients + tags file and deserializes it into wrapper
     /// </summary>
@@ -38,22 +38,6 @@ public class IngredientsWrapper
         }
 
         return output;
-    }
-
-    /// <summary>
-    /// Collects all the ingredients and joins them with units
-    /// </summary>
-    /// <returns>All ingredients in their <see cref="Ingredient"/> representation</returns>
-    public List<Ingredient> UnwrapIngredients()
-    {
-        return Ingredients.SelectMany(x => x.List, (measure, ingredient) => new Ingredient()
-        {
-            Name = ingredient.Name,
-            Nutrients = ingredient.Nutrients,
-            Price = ingredient.Price,
-            Tags = ingredient.Tags,
-            Unit = Measure.ById(measure.Unit),
-        }).ToList();
     }
     
 #pragma warning disable CS8618

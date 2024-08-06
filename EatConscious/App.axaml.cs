@@ -44,7 +44,15 @@ public partial class App : Application
     private void SerializeData(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
         string json = JsonSerializer.Serialize(_mainModel.WrapIngredients());
-        using var sw = new StreamWriter(IngredientsPath, false);
-        sw.Write(json);
+        using (var sw = new StreamWriter(IngredientsPath, false))
+        {
+            sw.Write(json);
+        }
+
+        json = JsonSerializer.Serialize(_mainModel.WrapRecipes());
+        using (var sw = new StreamWriter(RecipePath, false))
+        {
+            sw.Write(json);
+        }
     }
 }

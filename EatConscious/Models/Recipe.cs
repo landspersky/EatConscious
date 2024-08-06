@@ -13,9 +13,9 @@ public class Recipe
     
     public string Note { get; init; }
 
-    public double Price => Ingredients.Sum(x => x.Ingredient.Price * (x.Ingredient.Unit.BaseValue / x.Value));
+    public double Price => Ingredients.Sum(x => x.Ingredient.Price * (x.Value / x.Ingredient.Unit.BaseValue));
     
-    public double Kcal => Ingredients.Sum(x => x.Ingredient.Nutrients.Kcal * (x.Ingredient.Unit.BaseValue / x.Value));
+    public double Kcal => Ingredients.Sum(x => x.Ingredient.Nutrients.Kcal * (x.Value / x.Ingredient.Unit.BaseValue));
 }
 
 public class IngredientPortion

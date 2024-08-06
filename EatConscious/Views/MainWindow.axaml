@@ -21,6 +21,9 @@
         <DataTemplate DataType="model:Ingredient">
             <view:IngredientView />
         </DataTemplate>
+        <DataTemplate DataType="model:Recipe">
+            <view:RecipeView />
+        </DataTemplate>
     </Window.DataTemplates>
     
     <TabControl>
@@ -49,7 +52,22 @@
                 </ScrollViewer>
             </Grid>
         </TabItem>
-        <TabItem Header="Recipes">Lorem Ipsum</TabItem>
+        <TabItem Header="Recipes">
+            <Grid ColumnDefinitions="Auto *" RowDefinitions="Auto *">
+                <Button>Add recipe</Button>
+                
+                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <ListBox ItemsSource="{Binding Recipes}" SelectionMode="Multiple,Toggle">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </ScrollViewer>
+            </Grid>
+            
+        </TabItem>
     </TabControl>
 
 </Window>

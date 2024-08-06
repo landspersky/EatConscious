@@ -58,6 +58,7 @@ public static class RecipeExtensions
         {
             Id = x.Ingredient.Id,
             Value = x.Value,
-        }).ToList()
+        }).ToList(),
+        Tags = r.Tags,
     };
 }

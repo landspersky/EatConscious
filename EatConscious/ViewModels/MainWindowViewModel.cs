@@ -43,8 +43,15 @@ public class MainWindowViewModel : ViewModelBase
         _sourceCache.Connect()
                     .Bind(out _ingredients)
                     .Subscribe();
+        
+        _recipeCache.AddOrUpdate((State.OnLoad.Recipes));
+
+        _recipeCache.Connect()
+                    .Bind(out _recipes)
+                    .Subscribe();
     }
 
+    #region ingredients
     /// <summary>
     /// Keeps the ingredients cached, helpful for sorting and filtering
     /// </summary>
@@ -120,6 +127,22 @@ public class MainWindowViewModel : ViewModelBase
 
         this.RaisePropertyChanged(nameof(Ingredients));
     }
+    #endregion
+
+    #region recipes
+
+    private readonly SourceCache<Recipe, int> _recipeCache = new (x => x.Id);
+
+    private ReadOnlyObservableCollection<Recipe> _recipes;
+    /// <summary>
+    /// Source collection for the recipe form
+    /// </summary>
+    public ReadOnlyObservableCollection<Recipe> Recipes => _recipes;
+
+    public ObservableCollection<string> RecipeTags { get; } = new(State.OnLoad.RecipeTags);
+
+
+    #endregion
 
     /// <summary>
     /// Serializes tags and ingredients grouped by unit
@@ -138,6 +161,15 @@ public class MainWindowViewModel : ViewModelBase
         {
             Tags = Tags.ToList(),
             Ingredients = ingredientGroups.ToList()
+        };
+    }
+
+    public Wrappers.RecipeWrapper WrapRecipes()
+    {
+        return new RecipeWrapper()
+        {
+            Tags = RecipeTags.ToList(),
+            Recipes = Recipes.Select(x => x.Strip()).ToList(),
         };
     }
 }

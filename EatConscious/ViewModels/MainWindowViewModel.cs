@@ -6,9 +6,10 @@ using System.Linq;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using DynamicData;
+using ReactiveUI;
 using EatConscious.Models;
 using EatConscious.Views;
-using ReactiveUI;
+using EatConscious.Wrappers;
 
 namespace EatConscious.ViewModels;
 
@@ -123,7 +124,7 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Serializes tags and ingredients grouped by unit
     /// </summary>
-    public IngredientsWrapper WrapIngredients()
+    public Wrappers.IngredientsWrapper WrapIngredients()
     {
         var ingredientGroups = _sourceCache.Items
             .GroupBy(x => x.Unit.Id)

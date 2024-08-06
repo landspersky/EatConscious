@@ -55,6 +55,7 @@ public class IngredientsWrapper
     /// </summary>
     public class IngredientStripped
     {
+        public int Id { get; init; }
         public string Name { get; init; }
         public Nutrients Nutrients { get; init; }
         public double Price { get; init; }
@@ -70,6 +71,7 @@ public static class IngredientExtensions
     /// </summary>
     public static IngredientsWrapper.IngredientStripped Strip(this Ingredient i) => new()
     {
+        Id = i.Id,
         Name = i.Name,
         Nutrients = i.Nutrients,
         Price = i.Price,

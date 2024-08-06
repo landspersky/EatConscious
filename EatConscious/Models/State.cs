@@ -11,10 +11,17 @@ public class State
     
     public static State OnLoad { get; } = Load();
 
+    /// <summary>
+    /// Highest <see cref="Ingredient"/> Id for assigning to new objects
+    /// </summary>
+    public static int TopIngredientId { get; private set; }
+    public static void IncrementIngredientId() => TopIngredientId++;
+
     private static State Load()
     {
         var ingredients = UnwrapIngredients(IngredientsWrapper.StateOnLoad);
         var ingredientTags = IngredientsWrapper.StateOnLoad.Tags;
+        TopIngredientId = ingredients.Count == 0 ? 0 : ingredients.Max(x => x.Id);
         return new State()
         {
             Ingredients = ingredients,
@@ -24,7 +31,6 @@ public class State
 
     private State()
     {
-        
     }
     
     /// <summary>
@@ -35,6 +41,7 @@ public class State
     {
         return wrapper.Ingredients.SelectMany(x => x.List, (measure, ingredient) => new Ingredient()
         {
+            Id = ingredient.Id,
             Name = ingredient.Name,
             Nutrients = ingredient.Nutrients,
             Price = ingredient.Price,

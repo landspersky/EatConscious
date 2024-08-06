@@ -5,6 +5,10 @@ namespace EatConscious.Models;
 
 public class Ingredient
 {
+    /// <summary>
+    /// Unique identifier for each ingredient
+    /// </summary>
+    public int Id { get; init; }
     public string Name { get; init; }
     
     /// <summary>
@@ -24,7 +28,7 @@ public class Ingredient
     /// <summary>
     /// The go-to method of creating new ingredient
     /// </summary>
-    public static Ingredient Convert(string name, 
+    public static Ingredient Create(string name, 
         Nutrients nutrientsPerX, double x, 
         double pricePerY, double y,
         Measure measure,
@@ -32,11 +36,14 @@ public class Ingredient
     {
         var nutrients = nutrientsPerX.Map(n => n * (measure.BaseValue / x));
         var price = pricePerY * (measure.BaseValue / y);
-        return new Ingredient(name, nutrients.Map(n => Math.Round(n, 2)), Math.Round(price, 2), tags, measure);
+        State.IncrementIngredientId();
+        return new Ingredient(State.TopIngredientId, name, nutrients.Map(n => Math.Round(n, 2)),
+            Math.Round(price, 2), tags, measure);
     }
     
-    private Ingredient(string name, Nutrients nutrients, double price, List<string> tags, Measure unit)
+    private Ingredient(int id, string name, Nutrients nutrients, double price, List<string> tags, Measure unit)
     {
+        Id = id;
         Name = name;
         Nutrients = nutrients;
         Price = price;
@@ -46,7 +53,7 @@ public class Ingredient
 
 #pragma warning disable CS8618
     /// <summary>
-    /// The default constructor used by the <see cref="IngredientsWrapper.UnwrapIngredients"/>, please use <see cref="Convert"/>
+    /// The default constructor used by the <see cref="State.UnwrapIngredients"/>, please use <see cref="Create"/>
     /// </summary>
     public Ingredient()
     {

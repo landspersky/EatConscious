@@ -47,7 +47,7 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Keeps the ingredients cached, helpful for sorting and filtering
     /// </summary>
-    private readonly SourceCache<Ingredient, string> _sourceCache = new (x => x.Name);
+    private readonly SourceCache<Ingredient, int> _sourceCache = new (x => x.Id);
     
     
     private ReadOnlyObservableCollection<Ingredient> _ingredients;

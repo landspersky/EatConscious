@@ -30,8 +30,8 @@ public class Ingredient
         Measure measure,
         List<string> tags)
     {
-        var nutrients = nutrientsPerX.Map(n => n * (x / measure.BaseValue));
-        var price = pricePerY * (y / measure.BaseValue);
+        var nutrients = nutrientsPerX.Map(n => n * (measure.BaseValue / x));
+        var price = pricePerY * (measure.BaseValue / y);
         return new Ingredient(name, nutrients.Map(n => Math.Round(n, 2)), Math.Round(price, 2), tags, measure);
     }
     

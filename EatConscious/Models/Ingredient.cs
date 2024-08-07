@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using EatConscious.ViewModels;
 
 namespace EatConscious.Models;
 
-public class Ingredient
+public class Ingredient : ISortable
 {
     /// <summary>
     /// Unique identifier for each ingredient

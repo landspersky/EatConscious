@@ -53,6 +53,6 @@ public class NewIngredientViewModel : ViewModelBase
     public NewIngredientViewModel(MainWindowViewModel mainModel)
     {
         _mainModel = mainModel;
-        Tags = mainModel.Tags;
+        Tags = mainModel.IngredientTags;
     }
 }

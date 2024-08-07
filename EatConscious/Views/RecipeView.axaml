@@ -7,10 +7,20 @@
              x:Class="EatConscious.Views.RecipeView"
              x:DataType="model:Recipe">
     
+    <UserControl.Styles>
+        <Style Selector="WrapPanel TextBlock">
+            <Setter Property="Margin" Value="0 3 10 0"></Setter>
+        </Style>
+    </UserControl.Styles>
+    
     <StackPanel>
         <TextBlock FontWeight="Bold" Text="{Binding Name}" FontSize="16"/>
-        <TextBlock Text="{Binding Kcal, StringFormat=Kcal: {0}}"/>
-        <TextBlock Text="{Binding Price, StringFormat=Price: {0}}"/>
+        <WrapPanel DataContext="{Binding Nutrients}">
+            <TextBlock Text="{Binding Protein, StringFormat=Protein: {0}}" />
+            <TextBlock Text="{Binding Carbs, StringFormat=Carbs: {0}}" />
+            <TextBlock Text="{Binding Fats, StringFormat=Fats: {0}}" />
+            <TextBlock Text="{Binding Kcal, StringFormat=Kcal: {0}}" />
+        </WrapPanel>        <TextBlock Text="{Binding Price, StringFormat=Price: {0}}"/>
         <WrapPanel>
             <ItemsControl ItemsSource="{Binding Tags}">
                 <ItemsControl.ItemsPanel>

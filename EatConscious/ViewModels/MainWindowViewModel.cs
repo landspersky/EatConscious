@@ -50,8 +50,13 @@ public class MainWindowViewModel : ViewModelBase
                     .Bind(out _recipes)
                     .Subscribe();
     }
+    
+    /// <summary>
+    /// Categories to sort on, common to both ingredients and recipes
+    /// </summary>
+    public ObservableCollection<string> SortOptions { get; } = new(Enum.GetValues<Sorting>().Select(x => x.ToString()));
 
-    #region ingredients
+    #region INGREDIENTS
     /// <summary>
     /// Keeps the ingredients cached, helpful for sorting and filtering
     /// </summary>
@@ -62,9 +67,11 @@ public class MainWindowViewModel : ViewModelBase
     /// Source collection for the ingredient form
     /// </summary>
     public ReadOnlyObservableCollection<Ingredient> Ingredients => _ingredients;
-
     
     private ObservableCollection<string> _ingredientFilters = new();
+    /// <summary>
+    /// Tags for filtering ingredients
+    /// </summary>
     public ObservableCollection<string> IngredientFilters
     {
         get => _ingredientFilters;
@@ -77,17 +84,15 @@ public class MainWindowViewModel : ViewModelBase
     }
     
     /// <summary>
-    /// These tags are shown when creating new ingredient, they do not limit already existing ones
+    /// Available tags for assigning to new ingredients
     /// </summary>
-    public ObservableCollection<string> Tags { get; } = new(State.OnLoad.IngredientTags);
-    
-    /// <summary>
-    /// Kategorie, podle kterých lze třídit
-    /// </summary>
-    public ObservableCollection<string> SortOptions { get; } = new(Enum.GetValues<Sorting>().Select(x => x.ToString()));
+    public ObservableCollection<string> IngredientTags { get; } = new(State.OnLoad.IngredientTags);
     
     private ObservableCollection<string> _ingredientSorting = new();
-
+    /// <summary>
+    /// Selected parameters for sorting
+    /// </summary>
+    /// <remarks>Should be just one value but bound to SelectedItems for ease and future extension</remarks>
     public ObservableCollection<string> IngredientSorting
     {
         get => _ingredientSorting;
@@ -98,24 +103,16 @@ public class MainWindowViewModel : ViewModelBase
             _ingredientSorting.CollectionChanged += UpdateIngredientSelection;
         }
     }
-    
-    public void AddIngredientClick()
-    {
-        var window = new NewIngredientWindow(this);
-        window.Show();
-    }
-    
-    /// <summary>
-    /// Adds or updates (based on name) the ingredients collection
-    /// </summary>
-    public void AddOrUpdate(Ingredient ingredient) => _ingredientCache.AddOrUpdate(ingredient);
 
+    /// <summary>
+    /// Reflects changes made in filters and sorts
+    /// </summary>
     private void UpdateIngredientSelection(object? sender, EventArgs e)
     {
         Sorting? sorting = IngredientSorting.FirstOrDefault()?.ToSorting();
 
         var changeSet = _ingredientCache.Connect()
-                                                           .Filter(x => !IngredientFilters.Except(x.Tags).Any());
+            .Filter(x => !IngredientFilters.Except(x.Tags).Any());
 
         if (sorting is { } s)
         {
@@ -126,10 +123,26 @@ public class MainWindowViewModel : ViewModelBase
 
         this.RaisePropertyChanged(nameof(Ingredients));
     }
+    
+    /// <summary>
+    /// Opens <see cref="NewIngredientWindow"/>
+    /// </summary>
+    public void AddIngredientClick()
+    {
+        var window = new NewIngredientWindow(this);
+        window.Show();
+    }
+    
+    /// <summary>
+    /// Adds or updates (based on id) the ingredients collection
+    /// </summary>
+    public void AddOrUpdate(Ingredient ingredient) => _ingredientCache.AddOrUpdate(ingredient);
     #endregion
 
-    #region recipes
-
+    #region RECIPES
+    /// <summary>
+    /// Keeps the recipes cached, helpful for sorting and filtering
+    /// </summary>
     private readonly SourceCache<Recipe, int> _recipeCache = new (x => x.Id);
 
     private ReadOnlyObservableCollection<Recipe> _recipes;
@@ -138,17 +151,75 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public ReadOnlyObservableCollection<Recipe> Recipes => _recipes;
 
-    public ObservableCollection<string> RecipeTags { get; } = new(State.OnLoad.RecipeTags);
+    private ObservableCollection<string> _recipeFilters = new();
+    /// <summary>
+    /// Tags for filtering recipes
+    /// </summary>
+    public ObservableCollection<string> RecipeFilters
+    {
+        get => _recipeFilters;
+        set
+        {
+            _recipeFilters.CollectionChanged -= UpdateRecipeSelection;
+            this.RaiseAndSetIfChanged(ref _recipeFilters, value);
+            _recipeFilters.CollectionChanged += UpdateRecipeSelection;
+        }
+    }
     
-    public void AddOrUpdate(Recipe recipe) => _recipeCache.AddOrUpdate(recipe);
+    /// <summary>
+    /// Available tags for assigning to new recipes
+    /// </summary>
+    public ObservableCollection<string> RecipeTags { get; } = new(State.OnLoad.RecipeTags);
 
+    private ObservableCollection<string> _recipeSorting = new();
+    /// <summary>
+    /// Selected parameters for sorting
+    /// </summary>
+    /// <remarks>Should be just one value but bound to SelectedItems for ease and future extension</remarks>
+    public ObservableCollection<string> RecipeSorting
+    {
+        get => _recipeSorting;
+        set
+        {
+            _recipeSorting.CollectionChanged -= UpdateRecipeSelection;
+            this.RaiseAndSetIfChanged(ref _recipeSorting, value);
+            _recipeSorting.CollectionChanged += UpdateRecipeSelection;
+        }
+    }
+
+    /// <summary>
+    /// Reflects changes made in filters and sorts
+    /// </summary>
+    private void UpdateRecipeSelection(object? sender, EventArgs e)
+    {
+        Sorting? sorting = RecipeSorting.FirstOrDefault()?.ToSorting();
+
+        var changeSet = _recipeCache.Connect()
+            .Filter(x => !RecipeFilters.Except(x.Tags).Any());
+
+        if (sorting is { } s)
+        {
+            changeSet = changeSet.Sort(s.GetComparer());
+        }
+        changeSet.Bind(out _recipes)
+                 .Subscribe();
+
+        this.RaisePropertyChanged(nameof(Recipes));
+    }
+
+    /// <summary>
+    /// Opens <see cref="NewRecipeWindow"/>
+    /// </summary>
     public void AddRecipeClick()
     {
         var window = new NewRecipeWindow(this);
         window.Show();
     }
-
-
+    
+    /// <summary>
+    /// Adds or updates (based on id) the recipe collection
+    /// </summary>
+    public void AddOrUpdate(Recipe recipe) => _recipeCache.AddOrUpdate(recipe);
     #endregion
 
     /// <summary>
@@ -166,7 +237,7 @@ public class MainWindowViewModel : ViewModelBase
         
         return new IngredientsWrapper()
         {
-            Tags = Tags.ToList(),
+            Tags = IngredientTags.ToList(),
             Ingredients = ingredientGroups.ToList()
         };
     }
@@ -181,6 +252,9 @@ public class MainWindowViewModel : ViewModelBase
     }
 }
 
+/// <summary>
+/// Possible values to sort on
+/// </summary>
 public enum Sorting
 {
     Name,
@@ -191,11 +265,21 @@ public enum Sorting
     Fats
 }
 
+/// <summary>
+/// Exposes all fields from <see cref="Sorting"/> for common comparing functions
+/// </summary>
+public interface ISortable
+{
+    string Name { get; }
+    double Price { get; }
+    Nutrients Nutrients { get; }
+}
+
 public static class SortingExtensions
 {
-    private static readonly Dictionary<Sorting, Comparison<Ingredient>> CompareFunctions = new()
+    private static readonly Dictionary<Sorting, Comparison<ISortable>> CompareFunctions = new()
     {
-        { Sorting.Name, (x, y) => string.Compare(x.Name, y.Name, StringComparison.Ordinal) },
+        { Sorting.Name, (x, y) => string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase) },
         { Sorting.Price, (x, y) => x.Price.CompareTo(y.Price) },
         { Sorting.Kcal, (x, y) => x.Nutrients.Kcal.CompareTo(y.Nutrients.Kcal) },
         { Sorting.Protein, (x, y) => x.Nutrients.Protein.CompareTo(y.Nutrients.Protein) },
@@ -203,13 +287,19 @@ public static class SortingExtensions
         { Sorting.Fats, (x, y) => x.Nutrients.Fats.CompareTo(y.Nutrients.Fats) },
     };
 
-    public static IComparer<Ingredient> GetComparer(this Sorting s)
+    /// <summary>
+    /// Gets comparer based on the value passed in the parameter
+    /// </summary>
+    public static IComparer<ISortable> GetComparer(this Sorting s)
     {
-        return Comparer<Ingredient>.Create(CompareFunctions[s]);
+        return Comparer<ISortable>.Create(CompareFunctions[s]);
     }
 
     private static readonly Dictionary<string, Sorting> SortingByName =
         Enum.GetValues<Sorting>().ToDictionary(k => k.ToString(), v => v);
 
+    /// <summary>
+    /// Inverse function to ToString
+    /// </summary>
     public static Sorting ToSorting(this string s) => SortingByName[s];
 }

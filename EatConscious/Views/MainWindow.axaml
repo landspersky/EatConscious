@@ -33,7 +33,7 @@
                 
                 <controls:PopupSelector Grid.Row="0" Grid.Column="1"
                                         Content="Filter"
-                                        ItemsSource="{Binding Tags}"
+                                        ItemsSource="{Binding IngredientTags}"
                                         SelectedItems="{Binding IngredientFilters}"/>
                 <controls:PopupSelector Grid.Row="0" Grid.Column="2"
                                         Content="Sort"
@@ -53,10 +53,19 @@
             </Grid>
         </TabItem>
         <TabItem Header="Recipes">
-            <Grid ColumnDefinitions="Auto *" RowDefinitions="Auto *">
+            <Grid ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
                 <Button Command="{Binding AddRecipeClick}">Add recipe</Button>
                 
-                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <controls:PopupSelector Grid.Row="0" Grid.Column="1"
+                                        Content="Filter"
+                                        ItemsSource="{Binding RecipeTags}"
+                                        SelectedItems="{Binding RecipeFilters}"/>
+                <controls:PopupSelector Grid.Row="0" Grid.Column="2"
+                                        Content="Sort"
+                                        ItemsSource="{Binding SortOptions}"
+                                        SelectedItems="{Binding RecipeSorting}"
+                                        SingleSelect="True"/>
+                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
                     <ListBox ItemsSource="{Binding Recipes}" SelectionMode="Multiple,Toggle">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>

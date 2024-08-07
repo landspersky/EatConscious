@@ -50,6 +50,14 @@
                         <Image Source="/Assets/trash-can-outline.png" Width="24" Height="24"/>
                     </Button.Content>
                 </Button>
+                
+                <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
+                        Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).EditRecipeCommand}"
+                        CommandParameter="{Binding .}">
+                    <Button.Content>
+                        <Image Source="/Assets/pencil.png" Width="24" Height="24"/>
+                    </Button.Content>
+                </Button>
             </DockPanel>
         </DataTemplate>
     </Window.DataTemplates>

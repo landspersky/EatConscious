@@ -10,9 +10,6 @@ namespace EatConscious.ViewModels;
 public class NewIngredientViewModel : ViewModelBase
 {
     public string Name { get; set; } = "Onion";
-
-    private readonly MainWindowViewModel _mainModel;
-
     public double Kcal { get; set; }
     public double Protein { get; set; } 
     public double Carbs { get; set; }
@@ -71,6 +68,8 @@ public class NewIngredientViewModel : ViewModelBase
     }
 
     public void ButtonClick() => _mainModel.AddOrUpdate(CreateIngredient());
+    
+    private readonly MainWindowViewModel _mainModel;
 
     /// <summary>
     /// View model for creating a new ingredient

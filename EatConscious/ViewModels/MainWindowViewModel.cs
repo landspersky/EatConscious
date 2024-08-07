@@ -52,7 +52,7 @@ public class MainWindowViewModel : ViewModelBase
                     .Subscribe();
 
         EditIngredientCommand = ReactiveCommand.Create<Ingredient>(Edit);
-        
+        EditRecipeCommand = ReactiveCommand.Create<Recipe>(Edit);
         DeleteIngredientCommand = ReactiveCommand.Create<Ingredient>(Delete);
         DeleteRecipeCommand = ReactiveCommand.Create<Recipe>(Delete);
     }
@@ -153,7 +153,6 @@ public class MainWindowViewModel : ViewModelBase
     {
         var window = new NewIngredientWindow(this, ingredient);
         window.Show();
-        Console.WriteLine(ingredient);
     }
 
     /// <summary>
@@ -238,6 +237,17 @@ public class MainWindowViewModel : ViewModelBase
     public void AddRecipeClick()
     {
         var window = new NewRecipeWindow(this);
+        window.Show();
+    }
+    
+    /// <summary>
+    /// Command for editing existing Recipe
+    /// </summary>
+    public ReactiveCommand<Recipe, Unit> EditRecipeCommand { get; }
+
+    private void Edit(Recipe recipe)
+    {
+        var window = new NewRecipeWindow(this, recipe);
         window.Show();
     }
     

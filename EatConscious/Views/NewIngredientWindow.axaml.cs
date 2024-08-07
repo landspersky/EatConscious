@@ -1,7 +1,4 @@
-using System;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using EatConscious.Models;
 using EatConscious.ViewModels;
@@ -28,10 +25,5 @@ public partial class NewIngredientWindow : Window
         InitializeComponent();
         var ingredientModel = new NewIngredientViewModel(model, ingredient);
         DataContext = ingredientModel;
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 }

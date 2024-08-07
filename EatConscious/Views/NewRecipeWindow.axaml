@@ -72,6 +72,6 @@
                 </DockPanel>
                 <TextBox Text="{Binding Note}" TextWrapping="Wrap" AcceptsReturn="True" 
                          Width="250" MaxHeight="250" HorizontalAlignment="Stretch"/>
-                <Button HorizontalAlignment="Center" Content="Add" Command="{Binding AddClick}"/>
+                <Button HorizontalAlignment="Center" Content="{Binding ButtonText}" Command="{Binding ButtonClick}"/>
         </StackPanel>
 </Window>

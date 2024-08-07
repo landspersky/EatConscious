@@ -34,11 +34,11 @@
                 <controls:PopupSelector Grid.Row="0" Grid.Column="1"
                                         Content="Filter"
                                         ItemsSource="{Binding Tags}"
-                                        SelectedItems="{Binding FilteredTags}"/>
+                                        SelectedItems="{Binding IngredientFilters}"/>
                 <controls:PopupSelector Grid.Row="0" Grid.Column="2"
                                         Content="Sort"
                                         ItemsSource="{Binding SortOptions}"
-                                        SelectedItems="{Binding SelectedSorting}"
+                                        SelectedItems="{Binding IngredientSorting}"
                                         SingleSelect="True"/>
                 
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">

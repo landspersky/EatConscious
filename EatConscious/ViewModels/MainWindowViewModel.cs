@@ -38,11 +38,11 @@ public class MainWindowViewModel : ViewModelBase
 {
     public MainWindowViewModel()
     {
-        _sourceCache.AddOrUpdate(State.OnLoad.Ingredients);
+        _ingredientCache.AddOrUpdate(State.OnLoad.Ingredients);
         
-        _sourceCache.Connect()
-                    .Bind(out _ingredients)
-                    .Subscribe();
+        _ingredientCache.Connect()
+                        .Bind(out _ingredients)
+                        .Subscribe();
         
         _recipeCache.AddOrUpdate((State.OnLoad.Recipes));
 
@@ -55,8 +55,7 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Keeps the ingredients cached, helpful for sorting and filtering
     /// </summary>
-    private readonly SourceCache<Ingredient, int> _sourceCache = new (x => x.Id);
-    
+    private readonly SourceCache<Ingredient, int> _ingredientCache = new (x => x.Id);
     
     private ReadOnlyObservableCollection<Ingredient> _ingredients;
     /// <summary>
@@ -65,15 +64,15 @@ public class MainWindowViewModel : ViewModelBase
     public ReadOnlyObservableCollection<Ingredient> Ingredients => _ingredients;
 
     
-    private ObservableCollection<string> _filteredTags = new();
-    public ObservableCollection<string> FilteredTags
+    private ObservableCollection<string> _ingredientFilters = new();
+    public ObservableCollection<string> IngredientFilters
     {
-        get => _filteredTags;
+        get => _ingredientFilters;
         set
         {
-            _filteredTags.CollectionChanged -= OnFilterTagsChanged;
-            this.RaiseAndSetIfChanged(ref _filteredTags, value);
-            _filteredTags.CollectionChanged += OnFilterTagsChanged;
+            _ingredientFilters.CollectionChanged -= UpdateIngredientSelection;
+            this.RaiseAndSetIfChanged(ref _ingredientFilters, value);
+            _ingredientFilters.CollectionChanged += UpdateIngredientSelection;
         }
     }
     
@@ -87,16 +86,16 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public ObservableCollection<string> SortOptions { get; } = new(Enum.GetValues<Sorting>().Select(x => x.ToString()));
     
-    private ObservableCollection<string> _selectedSorting = new();
+    private ObservableCollection<string> _ingredientSorting = new();
 
-    public ObservableCollection<string> SelectedSorting
+    public ObservableCollection<string> IngredientSorting
     {
-        get => _selectedSorting;
+        get => _ingredientSorting;
         set
         {
-            _selectedSorting.CollectionChanged -= OnFilterTagsChanged;
-            this.RaiseAndSetIfChanged(ref _selectedSorting, value);
-            _selectedSorting.CollectionChanged += OnFilterTagsChanged;
+            _ingredientSorting.CollectionChanged -= UpdateIngredientSelection;
+            this.RaiseAndSetIfChanged(ref _ingredientSorting, value);
+            _ingredientSorting.CollectionChanged += UpdateIngredientSelection;
         }
     }
     
@@ -109,14 +108,14 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Adds or updates (based on name) the ingredients collection
     /// </summary>
-    public void AddOrUpdate(Ingredient ingredient) => _sourceCache.AddOrUpdate(ingredient);
+    public void AddOrUpdate(Ingredient ingredient) => _ingredientCache.AddOrUpdate(ingredient);
 
-    private void OnFilterTagsChanged(object? sender, EventArgs e)
+    private void UpdateIngredientSelection(object? sender, EventArgs e)
     {
-        Sorting? sorting = SelectedSorting.FirstOrDefault()?.ToSorting();
+        Sorting? sorting = IngredientSorting.FirstOrDefault()?.ToSorting();
 
-        var changeSet = _sourceCache.Connect()
-                                                           .Filter(x => !FilteredTags.Except(x.Tags).Any());
+        var changeSet = _ingredientCache.Connect()
+                                                           .Filter(x => !IngredientFilters.Except(x.Tags).Any());
 
         if (sorting is { } s)
         {
@@ -157,7 +156,7 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public Wrappers.IngredientsWrapper WrapIngredients()
     {
-        var ingredientGroups = _sourceCache.Items
+        var ingredientGroups = _ingredientCache.Items
             .GroupBy(x => x.Unit.Id)
             .Select(g => new IngredientsWrapper.IngredientsWithMeasure()
             {

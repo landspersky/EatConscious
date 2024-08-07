@@ -19,10 +19,30 @@
     
     <Window.DataTemplates>
         <DataTemplate DataType="model:Ingredient">
-            <view:IngredientView />
+            <DockPanel>
+                <view:IngredientView DockPanel.Dock="Left"/>
+                <!-- we need to find the view model from control and pass itself as parameter -->
+                <!-- in the below binding we fairly assume there is ListBox parent which has DataContext MainWindowViewModel -->
+                <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
+                        Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).DeleteIngredientCommand}"
+                        CommandParameter="{Binding .}">
+                    <Button.Content>
+                        <Image Source="/Assets/trash-can-outline.png" Width="24" Height="24"/>
+                    </Button.Content>
+                </Button>
+            </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="model:Recipe">
-            <view:RecipeView />
+            <DockPanel>
+                <view:RecipeView DockPanel.Dock="Left"/>
+                <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
+                        Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).DeleteRecipeCommand}"
+                        CommandParameter="{Binding .}">
+                    <Button.Content>
+                        <Image Source="/Assets/trash-can-outline.png" Width="24" Height="24"/>
+                    </Button.Content>
+                </Button>
+            </DockPanel>
         </DataTemplate>
     </Window.DataTemplates>
     
@@ -48,6 +68,22 @@
                                 <VirtualizingStackPanel />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+                        <!--      -->
+                        <!-- <ListBox.ItemTemplate> -->
+                        <!--     <DataTemplate DataType="model:Ingredient"> -->
+                        <!--         <DockPanel> -->
+                        <!--             <view:IngredientView DockPanel.Dock="Left"/> -->
+                        <!--             ~1~ we need to find the view model from control and pass itself as parameter @1@ -->
+                        <!--             <Button DockPanel.Dock="Right" HorizontalAlignment="Right"  -->
+                        <!--                     Command="{Binding $parent[ListBox], Path=DataContext.DeleteCommand}" -->
+                        <!--                     CommandParameter="{Binding .}"> -->
+                        <!--                 <Button.Content> -->
+                        <!--                     <Image Source="/Assets/trash-can-outline.png" Width="24" Height="24"/> -->
+                        <!--                 </Button.Content> -->
+                        <!--             </Button> -->
+                        <!--         </DockPanel> -->
+                        <!--     </DataTemplate> -->
+                        <!-- </ListBox.ItemTemplate> -->
                     </ListBox>
                 </ScrollViewer>
             </Grid>

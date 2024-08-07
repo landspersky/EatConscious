@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reactive;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using DynamicData;
@@ -49,6 +50,9 @@ public class MainWindowViewModel : ViewModelBase
         _recipeCache.Connect()
                     .Bind(out _recipes)
                     .Subscribe();
+        
+        DeleteIngredientCommand = ReactiveCommand.Create<Ingredient>(Delete);
+        DeleteRecipeCommand = ReactiveCommand.Create<Recipe>(Delete);
     }
     
     /// <summary>
@@ -137,6 +141,13 @@ public class MainWindowViewModel : ViewModelBase
     /// Adds or updates (based on id) the ingredients collection
     /// </summary>
     public void AddOrUpdate(Ingredient ingredient) => _ingredientCache.AddOrUpdate(ingredient);
+
+    /// <summary>
+    /// Command for deleting from the ingredients collection
+    /// </summary>
+    public ReactiveCommand<Ingredient, Unit> DeleteIngredientCommand { get; }
+    
+    private void Delete(Ingredient ingredient) => _ingredientCache.Remove(ingredient);
     #endregion
 
     #region RECIPES
@@ -220,6 +231,13 @@ public class MainWindowViewModel : ViewModelBase
     /// Adds or updates (based on id) the recipe collection
     /// </summary>
     public void AddOrUpdate(Recipe recipe) => _recipeCache.AddOrUpdate(recipe);
+    
+    /// <summary>
+    /// Command for deleting from the recipe collection
+    /// </summary>
+    public ReactiveCommand<Recipe, Unit> DeleteRecipeCommand { get; }
+
+    private void Delete(Recipe recipe) => _recipeCache.Remove(recipe);
     #endregion
 
     /// <summary>

@@ -99,7 +99,7 @@
                                 <TextBlock Text="{Binding SelectedUnit.Id}" />
                         </WrapPanel>
                 </DockPanel>
-                <Button HorizontalAlignment="Center" Content="Add" Command="{Binding AddClick}"/>
+                <Button HorizontalAlignment="Center" Content="{Binding ButtonText}" Command="{Binding ButtonClick}"/>
                 
         </StackPanel>
 </Window>

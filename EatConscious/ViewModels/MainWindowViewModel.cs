@@ -50,6 +50,8 @@ public class MainWindowViewModel : ViewModelBase
         _recipeCache.Connect()
                     .Bind(out _recipes)
                     .Subscribe();
+
+        EditIngredientCommand = ReactiveCommand.Create<Ingredient>(Edit);
         
         DeleteIngredientCommand = ReactiveCommand.Create<Ingredient>(Delete);
         DeleteRecipeCommand = ReactiveCommand.Create<Recipe>(Delete);
@@ -141,6 +143,18 @@ public class MainWindowViewModel : ViewModelBase
     /// Adds or updates (based on id) the ingredients collection
     /// </summary>
     public void AddOrUpdate(Ingredient ingredient) => _ingredientCache.AddOrUpdate(ingredient);
+    
+    /// <summary>
+    /// Command for editing existing Ingredient
+    /// </summary>
+    public ReactiveCommand<Ingredient, Unit> EditIngredientCommand { get; }
+
+    private void Edit(Ingredient ingredient)
+    {
+        var window = new NewIngredientWindow(this, ingredient);
+        window.Show();
+        Console.WriteLine(ingredient);
+    }
 
     /// <summary>
     /// Command for deleting from the ingredients collection

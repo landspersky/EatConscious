@@ -24,4 +24,18 @@ public struct Nutrients
             Fats = f(this.Fats)
         };
     }
+
+    /// <param name="otherNutrients">Nutrients to combine each value with</param>
+    /// <param name="f">Combining function</param>
+    /// <returns>Nutrients with values combined by the function</returns>
+    public Nutrients Combine(Nutrients otherNutrients, Func<double, double, double> f)
+    {
+        return new Nutrients()
+        {
+            Kcal = f(Kcal, otherNutrients.Kcal),
+            Protein = f(Protein, otherNutrients.Protein),
+            Carbs = f(Carbs, otherNutrients.Carbs),
+            Fats = f(Fats, otherNutrients.Fats),
+        };
+    }
 }

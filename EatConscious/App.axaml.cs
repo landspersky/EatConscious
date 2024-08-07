@@ -12,9 +12,15 @@ namespace EatConscious;
 public partial class App : Application
 {
     /// <summary>
-    /// Path of file containing ingredients and tags
+    /// Path of file containing ingredients and their tags
     /// </summary>
     public const string IngredientsPath = "ingredients.json";
+
+    /// <summary>
+    /// Path of file containing recipes and their tags
+    /// </summary>
+    public const string RecipePath = "recipes.json";
+    
     private readonly MainWindowViewModel _mainModel = new();
     public override void Initialize()
     {
@@ -38,7 +44,15 @@ public partial class App : Application
     private void SerializeData(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
         string json = JsonSerializer.Serialize(_mainModel.WrapIngredients());
-        using var sw = new StreamWriter(IngredientsPath, false);
-        sw.Write(json);
+        using (var sw = new StreamWriter(IngredientsPath, false))
+        {
+            sw.Write(json);
+        }
+
+        json = JsonSerializer.Serialize(_mainModel.WrapRecipes());
+        using (var sw = new StreamWriter(RecipePath, false))
+        {
+            sw.Write(json);
+        }
     }
 }

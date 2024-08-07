@@ -1,0 +1,77 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:EatConscious.ViewModels"
+        xmlns:controls="using:EatConscious.Controls"
+        xmlns:model="using:EatConscious.Models"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="EatConscious.Views.NewRecipeWindow"
+        x:DataType="vm:NewRecipeViewModel"
+        Title="NewRecipeWindow"
+        Width="300"
+        Height="450">
+        
+        <Window.Styles>
+                <Style Selector="DockPanel">
+                        <Setter Property="LastChildFill" Value="False" />
+                </Style>
+                <Style Selector="DockPanel TextBlock">
+                        <Setter Property="DockPanel.Dock" Value="Left" />
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="10"/>
+                </Style>
+                <Style Selector="DockPanel WrapPanel">
+                        <Setter Property="DockPanel.Dock" Value="Right" />
+                </Style>
+        </Window.Styles>
+        
+        <Window.DataTemplates>
+                <DataTemplate DataType="model:IngredientPortion">
+                        <DockPanel>
+                                <TextBlock FontWeight="Bold" Text="{Binding Ingredient.Name}" FontSize="12"/>
+                                <WrapPanel>
+                                        <controls:FeatureInput DockPanel.Dock="Right" VerticalAlignment="Top" 
+                                                               FontSize="12" MaxHeight="20"
+                                                               Text="{Binding Value}"/>
+                                        <TextBlock Text="{Binding Ingredient.Unit.Id}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                </DataTemplate>
+        </Window.DataTemplates>
+        
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5" MinWidth="250">
+                <DockPanel>
+                        <TextBlock Text="Name"/>
+                        <WrapPanel>
+                                <TextBox Text="{Binding Name}" MinWidth="150"/>
+                        </WrapPanel>
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Tags" VerticalAlignment="Top"/>
+                        <WrapPanel>
+                                <controls:TagSelector ItemsSource="{Binding Tags}"
+                                                      SelectedItems="{Binding SelectedTags, Mode=OneWayToSource}"/>
+                        </WrapPanel>
+                </DockPanel>
+                <DockPanel>
+                        <TextBlock Text="Ingredients"/>
+                </DockPanel>
+                <ScrollViewer>
+                        <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Single,Toggle"
+                                 MaxHeight="250">
+                                <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel />
+                                        </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                        </ListBox>
+                </ScrollViewer>
+                <DockPanel>
+                        <TextBlock Text="Note"/>
+                </DockPanel>
+                <TextBox Text="{Binding Note}" TextWrapping="Wrap" AcceptsReturn="True" 
+                         Width="250" MaxHeight="250" HorizontalAlignment="Stretch"/>
+                <Button HorizontalAlignment="Center" Content="Add" Command="{Binding AddClick}"/>
+        </StackPanel>
+</Window>

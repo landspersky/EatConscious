@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:model="using:EatConscious.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="EatConscious.Views.RecipeView"
+             x:DataType="model:Recipe">
+    
+    <UserControl.Styles>
+        <Style Selector="WrapPanel TextBlock">
+            <Setter Property="Margin" Value="0 3 10 0"></Setter>
+        </Style>
+    </UserControl.Styles>
+    
+    <StackPanel>
+        <TextBlock FontWeight="Bold" Text="{Binding Name}" FontSize="16"/>
+        <WrapPanel DataContext="{Binding Nutrients}">
+            <TextBlock Text="{Binding Protein, StringFormat=Protein: {0}}" />
+            <TextBlock Text="{Binding Carbs, StringFormat=Carbs: {0}}" />
+            <TextBlock Text="{Binding Fats, StringFormat=Fats: {0}}" />
+            <TextBlock Text="{Binding Kcal, StringFormat=Kcal: {0}}" />
+        </WrapPanel>        <TextBlock Text="{Binding Price, StringFormat=Price: {0}}"/>
+        <WrapPanel>
+            <ItemsControl ItemsSource="{Binding Tags}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat=#{0} }"></TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </WrapPanel>
+    </StackPanel>
+    
+</UserControl>

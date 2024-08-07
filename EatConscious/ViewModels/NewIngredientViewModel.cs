@@ -44,7 +44,7 @@ public class NewIngredientViewModel : ViewModelBase
             Carbs = Carbs,
             Fats = Fats
         };
-        return Ingredient.Convert(
+        return Ingredient.Create(
             Name, nutrients, NutrientBase, Price, PriceBase, SelectedUnit, SelectedTags.ToList());
     }
 
@@ -53,6 +53,6 @@ public class NewIngredientViewModel : ViewModelBase
     public NewIngredientViewModel(MainWindowViewModel mainModel)
     {
         _mainModel = mainModel;
-        Tags = mainModel.Tags;
+        Tags = mainModel.IngredientTags;
     }
 }

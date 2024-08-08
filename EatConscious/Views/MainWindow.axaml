@@ -103,7 +103,8 @@
                                         SingleSelect="True"/>
                 
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
-                    <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Multiple,Toggle">
+                    <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Single,Toggle"
+                             Margin="0 0 0 10" CornerRadius="3">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
@@ -131,7 +132,8 @@
                                         SelectedItems="{Binding RecipeSorting}"
                                         SingleSelect="True"/>
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
-                    <ListBox ItemsSource="{Binding Recipes}" SelectionMode="Multiple,Toggle">
+                    <ListBox ItemsSource="{Binding Recipes}" SelectionMode="Single,Toggle"
+                             Margin="0 0 0 10" CornerRadius="3">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />

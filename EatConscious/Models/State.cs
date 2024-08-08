@@ -66,6 +66,10 @@ public class State
         }).ToList();
     }
 
+    /// <summary>
+    /// Collects all the recipes and maps ids to actual ingredients
+    /// </summary>
+    /// <returns>All recipes in their <see cref="Recipe"/> representation</returns>
     private static List<Recipe> UnwrapRecipes(RecipeWrapper wrapper, Dictionary<int, Ingredient> ingredients)
     {
         IngredientPortion Convert(RecipeWrapper.IngredientPortion ingredientPortion) => new()
@@ -80,6 +84,7 @@ public class State
             Name = recipe.Name,
             Ingredients = recipe.Ingredients.Select(Convert).ToList(),
             Tags = recipe.Tags,
+            Note = recipe.Note,
         }).ToList();
     }
 }

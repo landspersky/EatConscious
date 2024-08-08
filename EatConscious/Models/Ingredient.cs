@@ -25,11 +25,16 @@ public class Ingredient : ISortable
     public List<string> Tags { get; init; } = new();
     
     public Measure Unit { get; init; }
+    
+    /// <summary>
+    /// This property is specific for the ingredient form for filtering recipes
+    /// </summary>
+    public bool IsChecked { get; set; }
 
     /// <summary>
-    /// The go-to method of creating new ingredient
+    /// The go-to method of creating new ingredients and editing existing ones
     /// </summary>
-    public static Ingredient Create(string name, 
+    public static Ingredient Create(int id, string name, 
         Nutrients nutrientsPerX, double x, 
         double pricePerY, double y,
         Measure measure,
@@ -37,8 +42,7 @@ public class Ingredient : ISortable
     {
         var nutrients = nutrientsPerX.Map(n => n * (measure.BaseValue / x));
         var price = pricePerY * (measure.BaseValue / y);
-        State.IncrementIngredientId();
-        return new Ingredient(State.TopIngredientId, name, nutrients.Map(n => Math.Round(n, 2)),
+        return new Ingredient(id, name, nutrients.Map(n => Math.Round(n, 2)),
             Math.Round(price, 2), tags, measure);
     }
     

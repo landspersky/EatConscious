@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reactive;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using DynamicData;
@@ -49,12 +50,37 @@ public class MainWindowViewModel : ViewModelBase
         _recipeCache.Connect()
                     .Bind(out _recipes)
                     .Subscribe();
+
+        EditIngredientCommand = ReactiveCommand.Create<Ingredient>(Edit);
+        EditRecipeCommand = ReactiveCommand.Create<Recipe>(Edit);
+        DeleteIngredientCommand = ReactiveCommand.Create<Ingredient>(Delete);
+        DeleteRecipeCommand = ReactiveCommand.Create<Recipe>(Delete);
+        OnCheckCommand = ReactiveCommand.Create<Ingredient>(OnCheck);
     }
     
     /// <summary>
     /// Categories to sort on, common to both ingredients and recipes
     /// </summary>
     public ObservableCollection<string> SortOptions { get; } = new(Enum.GetValues<Sorting>().Select(x => x.ToString()));
+
+    /// <summary>
+    /// Used for filtering recipes; all with non-zero intersection
+    /// </summary>
+    /// <remarks>We keep the checked ingredients cached, so we don't have to go all over them when filters change</remarks>
+    private HashSet<Ingredient> CheckedIngredients { get; } = new();
+
+    public ReactiveCommand<Ingredient, Unit> OnCheckCommand { get; }
+
+    private void OnCheck(Ingredient ingredient)
+    {
+        if (!CheckedIngredients.Add(ingredient))
+        {
+            CheckedIngredients.Remove(ingredient);
+        }
+
+        UpdateRecipeSelection(null, EventArgs.Empty);
+    }
+        
 
     #region INGREDIENTS
     /// <summary>
@@ -137,6 +163,24 @@ public class MainWindowViewModel : ViewModelBase
     /// Adds or updates (based on id) the ingredients collection
     /// </summary>
     public void AddOrUpdate(Ingredient ingredient) => _ingredientCache.AddOrUpdate(ingredient);
+    
+    /// <summary>
+    /// Command for editing existing Ingredient
+    /// </summary>
+    public ReactiveCommand<Ingredient, Unit> EditIngredientCommand { get; }
+
+    private void Edit(Ingredient ingredient)
+    {
+        var window = new NewIngredientWindow(this, ingredient);
+        window.Show();
+    }
+
+    /// <summary>
+    /// Command for deleting from the ingredients collection
+    /// </summary>
+    public ReactiveCommand<Ingredient, Unit> DeleteIngredientCommand { get; }
+    
+    private void Delete(Ingredient ingredient) => _ingredientCache.Remove(ingredient);
     #endregion
 
     #region RECIPES
@@ -195,7 +239,10 @@ public class MainWindowViewModel : ViewModelBase
         Sorting? sorting = RecipeSorting.FirstOrDefault()?.ToSorting();
 
         var changeSet = _recipeCache.Connect()
-            .Filter(x => !RecipeFilters.Except(x.Tags).Any());
+            .Filter(x => !RecipeFilters.Except(x.Tags).Any() 
+            // the checked ingredients are either none or they have common elements with recipe ingredient
+            && (!CheckedIngredients.Any() 
+                || CheckedIngredients.Intersect(x.Ingredients.Select(ing => ing.Ingredient)).Any()));
 
         if (sorting is { } s)
         {
@@ -217,9 +264,27 @@ public class MainWindowViewModel : ViewModelBase
     }
     
     /// <summary>
+    /// Command for editing existing Recipe
+    /// </summary>
+    public ReactiveCommand<Recipe, Unit> EditRecipeCommand { get; }
+
+    private void Edit(Recipe recipe)
+    {
+        var window = new NewRecipeWindow(this, recipe);
+        window.Show();
+    }
+    
+    /// <summary>
     /// Adds or updates (based on id) the recipe collection
     /// </summary>
     public void AddOrUpdate(Recipe recipe) => _recipeCache.AddOrUpdate(recipe);
+    
+    /// <summary>
+    /// Command for deleting from the recipe collection
+    /// </summary>
+    public ReactiveCommand<Recipe, Unit> DeleteRecipeCommand { get; }
+
+    private void Delete(Recipe recipe) => _recipeCache.Remove(recipe);
     #endregion
 
     /// <summary>
@@ -247,7 +312,7 @@ public class MainWindowViewModel : ViewModelBase
         return new RecipeWrapper()
         {
             Tags = RecipeTags.ToList(),
-            Recipes = Recipes.Select(x => x.Strip()).ToList(),
+            Recipes = _recipeCache.Items.Select(x => x.Strip()).ToList(),
         };
     }
 }

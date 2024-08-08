@@ -44,6 +44,7 @@ public class RecipeWrapper : IWrapper<RecipeWrapper>
         public string Name { get; init; }
         public List<IngredientPortion> Ingredients { get; init; }
         public List<string> Tags { get; init; }
+        public string Note { get; init; }
     }
 #pragma warning restore CS8618
 }
@@ -60,5 +61,6 @@ public static class RecipeExtensions
             Value = x.Value,
         }).ToList(),
         Tags = r.Tags,
+        Note = r.Note,
     };
 }

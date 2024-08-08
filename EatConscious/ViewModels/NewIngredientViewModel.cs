@@ -10,9 +10,6 @@ namespace EatConscious.ViewModels;
 public class NewIngredientViewModel : ViewModelBase
 {
     public string Name { get; set; } = "Onion";
-
-    private readonly MainWindowViewModel _mainModel;
-
     public double Kcal { get; set; }
     public double Protein { get; set; } 
     public double Carbs { get; set; }
@@ -33,6 +30,16 @@ public class NewIngredientViewModel : ViewModelBase
     public ObservableCollection<string> Tags { get; }
 
     public ObservableCollection<string> SelectedTags { get; set; } = new();
+
+    /// <summary>
+    /// Ingredient being edited; otherwise null
+    /// </summary>
+    private readonly Ingredient? _editing;
+
+    /// <summary>
+    /// What is displayed on the button on the bottom
+    /// </summary>
+    public string ButtonText => _editing is null ? "Add" : "Edit";
     
     /// <returns>Ingredient created from the input fields data</returns>
     private Ingredient CreateIngredient()
@@ -44,15 +51,46 @@ public class NewIngredientViewModel : ViewModelBase
             Carbs = Carbs,
             Fats = Fats
         };
+        
+        int id;
+        if (_editing is null)
+        {
+            State.IncrementIngredientId();
+            id = State.TopIngredientId;
+        }
+        else
+        {
+            id = _editing.Id;
+        }
+
         return Ingredient.Create(
-            Name, nutrients, NutrientBase, Price, PriceBase, SelectedUnit, SelectedTags.ToList());
+            id, Name, nutrients, NutrientBase, Price, PriceBase, SelectedUnit, SelectedTags.ToList());
     }
 
-    public void AddClick() => _mainModel.AddOrUpdate(CreateIngredient());
+    public void ButtonClick() => _mainModel.AddOrUpdate(CreateIngredient());
+    
+    private readonly MainWindowViewModel _mainModel;
 
+    /// <summary>
+    /// View model for creating a new ingredient
+    /// </summary>
+    /// <param name="mainModel">Parent view model</param>
     public NewIngredientViewModel(MainWindowViewModel mainModel)
     {
         _mainModel = mainModel;
         Tags = mainModel.IngredientTags;
+    }
+
+    /// <summary>
+    /// View model for editing an ingredient
+    /// </summary>
+    /// <param name="mainModel">Parent view model</param>
+    /// <param name="openedFrom">Ingredient to edit</param>
+    public NewIngredientViewModel(MainWindowViewModel mainModel, Ingredient openedFrom) 
+        : this(mainModel)
+    {
+        Name = openedFrom.Name;
+        SelectedUnit = openedFrom.Unit;
+        _editing = openedFrom;
     }
 }

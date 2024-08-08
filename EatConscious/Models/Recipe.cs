@@ -12,8 +12,8 @@ public class Recipe : ISortable
     public List<IngredientPortion> Ingredients { get; init; } = new();
 
     public List<string> Tags { get; init; } = new();
-    
-    public string Note { get; init; }
+
+    public string Note { get; init; } = "";
 
     public double Price => Ingredients.Sum(x => x.Ingredient.Price * (x.Value / x.Ingredient.Unit.BaseValue));
 

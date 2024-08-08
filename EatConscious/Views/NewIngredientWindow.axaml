@@ -8,9 +8,12 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="EatConscious.Views.NewIngredientWindow"
         x:DataType="vm:NewIngredientViewModel"
-        Title="NewIngredientWindow"
+        Title="Ingredient upgrade"
+        Icon="/Assets/pencil.png"
         Width="300"
-        Height="450">
+        Height="600"
+        MinWidth="300"
+        MinHeight="600">
         
         <Design.DataContext>
                 <vm:MainWindowViewModel/>

@@ -10,8 +10,10 @@
         x:Class="EatConscious.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         x:CompileBindings="True"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="EatConscious">
+        Icon="/Assets/apple.png"
+        Title="EatConscious"
+        MinHeight="350"
+        MinWidth="450">
     
     <Design.DataContext>
         <vm:MainWindowViewModel/>

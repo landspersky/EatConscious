@@ -23,6 +23,7 @@
                                 <controls:Selector ItemsSource="{TemplateBinding ItemsSource}"
                                                    SelectedItems="{TemplateBinding SelectedItems}"
                                                    SingleSelect="{TemplateBinding SingleSelect}"
+                                                   IsPointerOver="{TemplateBinding PointerOnPopup, Mode=OneWayToSource}"
                                                    Background="LightGray"/>
                             </Border>
                         </Popup>

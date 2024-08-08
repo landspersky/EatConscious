@@ -69,10 +69,26 @@
         </DataTemplate>
     </Window.DataTemplates>
     
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+        </Style>
+        <Style Selector="DropDownButton">
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </Window.Styles>
+    
     <TabControl>
         <TabItem Header="Ingredients">
             <Grid ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
-                <Button Command="{Binding AddIngredientClick}">Add Ingredient</Button>
+                <Button Command="{Binding AddIngredientClick}">
+                    <Button.Content>
+                        <Image Source="/Assets/plus.png" Width="24" Height="24"/>
+                    </Button.Content>
+                </Button>
                 
                 <controls:PopupSelector Grid.Row="0" Grid.Column="1"
                                         Content="Filter"
@@ -97,7 +113,11 @@
         </TabItem>
         <TabItem Header="Recipes">
             <Grid ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
-                <Button Command="{Binding AddRecipeClick}">Add recipe</Button>
+                <Button Command="{Binding AddRecipeClick}">
+                    <Button.Content>
+                        <Image Source="/Assets/plus.png" Width="24" Height="24"/>
+                    </Button.Content>
+                </Button>
                 
                 <controls:PopupSelector Grid.Row="0" Grid.Column="1"
                                         Content="Filter"

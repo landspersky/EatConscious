@@ -19,7 +19,8 @@
                             <Border Background="White"
                                     BorderBrush="Gray"
                                     BorderThickness="1"
-                                    HorizontalAlignment="Left">
+                                    HorizontalAlignment="Left"
+                                    CornerRadius="3">
                                 <controls:Selector ItemsSource="{TemplateBinding ItemsSource}"
                                                    SelectedItems="{TemplateBinding SelectedItems}"
                                                    SingleSelect="{TemplateBinding SingleSelect}"

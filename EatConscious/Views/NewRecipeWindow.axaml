@@ -36,7 +36,7 @@
                                 <WrapPanel>
                                         <controls:FeatureInput DockPanel.Dock="Right" VerticalAlignment="Top" 
                                                                FontSize="12" MaxHeight="20"
-                                                               Text="{Binding Value}"/>
+                                                               Value="{Binding Value, Mode=OneWayToSource}"/>
                                         <TextBlock Text="{Binding Ingredient.Unit.Id}"/>
                                 </WrapPanel>
                         </DockPanel>

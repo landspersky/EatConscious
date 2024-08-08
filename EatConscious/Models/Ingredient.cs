@@ -25,6 +25,11 @@ public class Ingredient : ISortable
     public List<string> Tags { get; init; } = new();
     
     public Measure Unit { get; init; }
+    
+    /// <summary>
+    /// This property is specific for the ingredient form for filtering recipes
+    /// </summary>
+    public bool IsChecked { get; set; }
 
     /// <summary>
     /// The go-to method of creating new ingredients and editing existing ones

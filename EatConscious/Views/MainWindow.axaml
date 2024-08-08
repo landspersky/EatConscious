@@ -38,8 +38,15 @@
                         <Image Source="/Assets/pencil.png" Width="24" Height="24"/>
                     </Button.Content>
                 </Button>
+                
+                <CheckBox DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).OnCheckCommand}"
+                    CommandParameter="{Binding .}"
+                    IsChecked="{Binding IsChecked}"
+                    Width="40" Height="40"></CheckBox>
             </DockPanel>
         </DataTemplate>
+        
         <DataTemplate DataType="model:Recipe">
             <DockPanel>
                 <view:RecipeView DockPanel.Dock="Left"/>

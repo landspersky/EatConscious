@@ -55,12 +55,32 @@ public class MainWindowViewModel : ViewModelBase
         EditRecipeCommand = ReactiveCommand.Create<Recipe>(Edit);
         DeleteIngredientCommand = ReactiveCommand.Create<Ingredient>(Delete);
         DeleteRecipeCommand = ReactiveCommand.Create<Recipe>(Delete);
+        OnCheckCommand = ReactiveCommand.Create<Ingredient>(OnCheck);
     }
     
     /// <summary>
     /// Categories to sort on, common to both ingredients and recipes
     /// </summary>
     public ObservableCollection<string> SortOptions { get; } = new(Enum.GetValues<Sorting>().Select(x => x.ToString()));
+
+    /// <summary>
+    /// Used for filtering recipes; all with non-zero intersection
+    /// </summary>
+    /// <remarks>We keep the checked ingredients cached, so we don't have to go all over them when filters change</remarks>
+    private HashSet<Ingredient> CheckedIngredients { get; } = new();
+
+    public ReactiveCommand<Ingredient, Unit> OnCheckCommand { get; }
+
+    private void OnCheck(Ingredient ingredient)
+    {
+        if (!CheckedIngredients.Add(ingredient))
+        {
+            CheckedIngredients.Remove(ingredient);
+        }
+
+        UpdateRecipeSelection(null, EventArgs.Empty);
+    }
+        
 
     #region INGREDIENTS
     /// <summary>
@@ -219,7 +239,10 @@ public class MainWindowViewModel : ViewModelBase
         Sorting? sorting = RecipeSorting.FirstOrDefault()?.ToSorting();
 
         var changeSet = _recipeCache.Connect()
-            .Filter(x => !RecipeFilters.Except(x.Tags).Any());
+            .Filter(x => !RecipeFilters.Except(x.Tags).Any() 
+            // the checked ingredients are either none or they have common elements with recipe ingredient
+            && (!CheckedIngredients.Any() 
+                || CheckedIngredients.Intersect(x.Ingredients.Select(ing => ing.Ingredient)).Any()));
 
         if (sorting is { } s)
         {
@@ -289,7 +312,7 @@ public class MainWindowViewModel : ViewModelBase
         return new RecipeWrapper()
         {
             Tags = RecipeTags.ToList(),
-            Recipes = Recipes.Select(x => x.Strip()).ToList(),
+            Recipes = _recipeCache.Items.Select(x => x.Strip()).ToList(),
         };
     }
 }

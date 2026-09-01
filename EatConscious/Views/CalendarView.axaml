@@ -37,6 +37,10 @@
         <Style Selector="Border.mealEntry:pointerover Button.removeButton">
             <Setter Property="Opacity" Value="1"/>
         </Style>
+        <Style Selector="Button.autoSize">
+            <Setter Property="Width" Value="NaN"/>
+            <Setter Property="Height" Value="NaN"/>
+        </Style>
     </UserControl.Styles>
 
     <DockPanel>
@@ -46,7 +50,7 @@
                        FontWeight="Bold" FontSize="16"
                        Text="{Binding CurrentMonth, StringFormat='{}{0:MMMM yyyy}'}"/>
             <Button Grid.Column="2" Content="&gt;" Command="{Binding NextMonthCommand}"/>
-            <Button Grid.Column="3" Content="Today" Command="{Binding TodayCommand}" Margin="10 0 0 0"/>
+            <Button Grid.Column="3" Classes="autoSize" Content="Today" Command="{Binding TodayCommand}" Margin="10 0 0 0"/>
         </Grid>
 
         <UniformGrid DockPanel.Dock="Top" Columns="7" Margin="5 0">
@@ -73,35 +77,36 @@
                             <Grid RowDefinitions="Auto *">
                                 <Grid Grid.Row="0" ColumnDefinitions="* Auto">
                                     <TextBlock Grid.Column="0" Text="{Binding Date.Day}" Margin="4"/>
-                                    <Button Grid.Column="1" Classes="addButton" Margin="0 2 2 0"
-                                            Command="{Binding TogglePickerCommand}"
-                                            Loaded="AddRecipeButton_OnLoaded">
+                                    <Button Grid.Column="1" Name="AddRecipeButton" Classes="addButton" Margin="0 2 2 0"
+                                            Command="{Binding TogglePickerCommand}">
                                         <Button.Content>
                                             <TextBlock Text="+" FontSize="12" HorizontalAlignment="Center"/>
                                         </Button.Content>
-                                        <Button.Flyout>
-                                            <!-- Flyout.IsOpen is a read-only direct property in Avalonia 11 (binding to
-                                                 it throws "The property IsOpen is readonly" and crashes the app), so
-                                                 it can't be set declaratively here. Clicking this Button opens the
-                                                 Flyout automatically; CalendarView.axaml.cs closes it again when
-                                                 AddRecipeCommand flips IsPickerOpen back to false. -->
-                                            <Flyout Placement="Bottom">
-                                                <ListBox ItemsSource="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).Recipes}"
-                                                         MaxHeight="200" MinWidth="150">
-                                                    <ListBox.ItemTemplate>
-                                                        <DataTemplate DataType="model:Recipe">
-                                                            <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                                                                    Background="Transparent" BorderThickness="0"
-                                                                    Command="{Binding $parent[ListBox].((vm:CalendarDayViewModel)DataContext).AddRecipeCommand}"
-                                                                    CommandParameter="{Binding .}">
-                                                                <TextBlock Text="{Binding Name}"/>
-                                                            </Button>
-                                                        </DataTemplate>
-                                                    </ListBox.ItemTemplate>
-                                                </ListBox>
-                                            </Flyout>
-                                        </Button.Flyout>
                                     </Button>
+                                    <!-- Popup.IsOpen (unlike Flyout.IsOpen) is a normal settable styled property,
+                                         so IsPickerOpen is the single source of truth here: TogglePickerCommand is
+                                         the only thing that opens/closes this, with no code-behind synchronization
+                                         needed. -->
+                                    <Popup Grid.Column="1" PlacementTarget="{Binding #AddRecipeButton}"
+                                           Placement="Bottom" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}"
+                                           IsLightDismissEnabled="True">
+                                        <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                                                BorderBrush="Gray" BorderThickness="1">
+                                            <ListBox ItemsSource="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).Recipes}"
+                                                     MaxHeight="200" MinWidth="150">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate DataType="model:Recipe">
+                                                        <Button Classes="autoSize" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                                                Background="Transparent" BorderThickness="0"
+                                                                Command="{Binding $parent[ListBox].((vm:CalendarDayViewModel)DataContext).AddRecipeCommand}"
+                                                                CommandParameter="{Binding .}">
+                                                            <TextBlock Text="{Binding Name}"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </Border>
+                                    </Popup>
                                 </Grid>
 
                                 <ItemsControl Grid.Row="1" ItemsSource="{Binding Entries}" Margin="2">

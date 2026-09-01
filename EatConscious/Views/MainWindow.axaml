@@ -86,7 +86,7 @@
                         </Button.Content>
                     </Button>
 
-                    <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                    <Button Classes="autoSize" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
                             Background="Transparent" BorderThickness="0"
                             Command="{Binding $parent[UserControl].((vm:MainWindowViewModel)DataContext).OpenRecipeDetailCommand}"
                             CommandParameter="{Binding Recipe}">

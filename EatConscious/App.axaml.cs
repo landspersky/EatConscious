@@ -59,5 +59,11 @@ public partial class App : Application
         {
             sw.Write(json);
         }
+
+        json = JsonSerializer.Serialize(_mainModel.WrapMealPlan());
+        using (var sw = new StreamWriter(MealPlanPath, false))
+        {
+            sw.Write(json);
+        }
     }
 }

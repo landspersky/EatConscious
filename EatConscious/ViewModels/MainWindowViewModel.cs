@@ -56,6 +56,14 @@ public class MainWindowViewModel : ViewModelBase
         DeleteIngredientCommand = ReactiveCommand.Create<Ingredient>(Delete);
         DeleteRecipeCommand = ReactiveCommand.Create<Recipe>(Delete);
         OnCheckCommand = ReactiveCommand.Create<Ingredient>(OnCheck);
+
+        PrevMonthCommand = ReactiveCommand.Create(() => { CurrentMonth = CurrentMonth.AddMonths(-1); });
+        NextMonthCommand = ReactiveCommand.Create(() => { CurrentMonth = CurrentMonth.AddMonths(1); });
+        TodayCommand = ReactiveCommand.Create(() => { CurrentMonth = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1); });
+        RemoveMealPlanEntryCommand = ReactiveCommand.Create<MealPlanEntry>(RemoveMealPlanEntry);
+        OpenRecipeDetailCommand = ReactiveCommand.Create<Recipe>(OpenRecipeDetail);
+
+        RebuildCalendarDays();
     }
     
     /// <summary>
@@ -285,6 +293,92 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Recipe, Unit> DeleteRecipeCommand { get; }
 
     private void Delete(Recipe recipe) => _recipeCache.Remove(recipe);
+    #endregion
+
+    #region CALENDAR
+    /// <summary>
+    /// Every recipe planned for every day; the source of truth for <see cref="CalendarDays"/>.
+    /// </summary>
+    public ObservableCollection<MealPlanEntry> MealPlan { get; } = new(State.OnLoad.MealPlan);
+
+    private DateOnly _currentMonth = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1);
+    /// <summary>
+    /// The first day of the month currently displayed in the calendar grid.
+    /// </summary>
+    public DateOnly CurrentMonth
+    {
+        get => _currentMonth;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _currentMonth, value);
+            RebuildCalendarDays();
+        }
+    }
+
+    public ReactiveCommand<Unit, Unit> PrevMonthCommand { get; }
+    public ReactiveCommand<Unit, Unit> NextMonthCommand { get; }
+    public ReactiveCommand<Unit, Unit> TodayCommand { get; }
+
+    private ReadOnlyObservableCollection<CalendarDayViewModel> _calendarDays;
+    /// <summary>
+    /// One entry per rendered grid cell (includes leading/trailing days of adjacent months).
+    /// </summary>
+    public ReadOnlyObservableCollection<CalendarDayViewModel> CalendarDays => _calendarDays;
+
+    /// <summary>
+    /// Rebuilds <see cref="CalendarDays"/> for the current <see cref="CurrentMonth"/> from <see cref="MealPlan"/>.
+    /// </summary>
+    private void RebuildCalendarDays()
+    {
+        var days = CalendarMonthBuilder.BuildDays(CurrentMonth);
+        var dayViewModels = days.Select(date => new CalendarDayViewModel(
+            date,
+            isCurrentMonth: date.Month == CurrentMonth.Month && date.Year == CurrentMonth.Year,
+            entries: MealPlan.Where(x => x.Date == date),
+            onAddRecipe: AddMealPlanEntry)).ToList();
+
+        _calendarDays = new ReadOnlyObservableCollection<CalendarDayViewModel>(new ObservableCollection<CalendarDayViewModel>(dayViewModels));
+        this.RaisePropertyChanged(nameof(CalendarDays));
+    }
+
+    /// <summary>
+    /// Adds a recipe to the given day and refreshes the grid.
+    /// </summary>
+    public void AddMealPlanEntry(DateOnly date, Recipe recipe)
+    {
+        MealPlan.Add(new MealPlanEntry { Date = date, Recipe = recipe });
+        RebuildCalendarDays();
+    }
+
+    /// <summary>
+    /// Command for removing a single recipe from a single day.
+    /// </summary>
+    public ReactiveCommand<MealPlanEntry, Unit> RemoveMealPlanEntryCommand { get; }
+
+    private void RemoveMealPlanEntry(MealPlanEntry entry)
+    {
+        MealPlan.Remove(entry);
+        RebuildCalendarDays();
+    }
+
+    /// <summary>
+    /// Command for opening the read-only detail popup for a recipe.
+    /// </summary>
+    public ReactiveCommand<Recipe, Unit> OpenRecipeDetailCommand { get; }
+
+    private void OpenRecipeDetail(Recipe recipe)
+    {
+        var window = new RecipeDetailWindow(recipe);
+        window.Show();
+    }
+
+    public MealPlanWrapper WrapMealPlan()
+    {
+        return new MealPlanWrapper()
+        {
+            Entries = MealPlan.Select(x => x.Strip()).ToList(),
+        };
+    }
     #endregion
 
     /// <summary>

@@ -69,6 +69,27 @@
                 </Button>
             </DockPanel>
         </DataTemplate>
+
+        <DataTemplate DataType="model:MealPlanEntry">
+            <Border Classes="mealEntry">
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Classes="removeButton" HorizontalAlignment="Right"
+                            Command="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).RemoveMealPlanEntryCommand}"
+                            CommandParameter="{Binding .}">
+                        <Button.Content>
+                            <TextBlock Text="×" FontSize="14"/>
+                        </Button.Content>
+                    </Button>
+
+                    <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                            Background="Transparent" BorderThickness="0"
+                            Command="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).OpenRecipeDetailCommand}"
+                            CommandParameter="{Binding Recipe}">
+                        <TextBlock Text="{Binding Recipe.Name}" TextWrapping="Wrap"/>
+                    </Button>
+                </DockPanel>
+            </Border>
+        </DataTemplate>
     </Window.DataTemplates>
     
     <Window.Styles>
@@ -142,7 +163,10 @@
                     </ListBox>
                 </ScrollViewer>
             </Grid>
-            
+
+        </TabItem>
+        <TabItem Header="Calendar">
+            <view:CalendarView/>
         </TabItem>
     </TabControl>
 

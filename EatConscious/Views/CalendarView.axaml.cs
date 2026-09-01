@@ -25,18 +25,7 @@ public partial class CalendarView : UserControl
             return;
         }
 
-        button.DataContextChanged += (_, _) =>
-        {
-            if (button.DataContext is CalendarDayViewModel vm)
-            {
-                vm.PropertyChanged += OnDayViewModelPropertyChanged;
-            }
-        };
-
-        if (button.DataContext is CalendarDayViewModel currentVm)
-        {
-            currentVm.PropertyChanged += OnDayViewModelPropertyChanged;
-        }
+        CalendarDayViewModel? subscribedVm = null;
 
         void OnDayViewModelPropertyChanged(object? s, PropertyChangedEventArgs args)
         {
@@ -45,6 +34,38 @@ public partial class CalendarView : UserControl
             {
                 flyout.Hide();
             }
+        }
+
+        void Subscribe(CalendarDayViewModel? vm)
+        {
+            if (subscribedVm is not null)
+            {
+                subscribedVm.PropertyChanged -= OnDayViewModelPropertyChanged;
+            }
+
+            subscribedVm = vm;
+
+            if (subscribedVm is not null)
+            {
+                subscribedVm.PropertyChanged += OnDayViewModelPropertyChanged;
+            }
+        }
+
+        void OnDataContextChanged(object? s, System.EventArgs args)
+        {
+            Subscribe(button.DataContext as CalendarDayViewModel);
+        }
+
+        button.DataContextChanged += OnDataContextChanged;
+        Subscribe(button.DataContext as CalendarDayViewModel);
+
+        button.Unloaded += OnButtonUnloaded;
+
+        void OnButtonUnloaded(object? s, RoutedEventArgs args)
+        {
+            button.DataContextChanged -= OnDataContextChanged;
+            Subscribe(null);
+            button.Unloaded -= OnButtonUnloaded;
         }
     }
 }

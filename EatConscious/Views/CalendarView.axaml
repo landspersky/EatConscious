@@ -3,9 +3,119 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:EatConscious.ViewModels"
+             xmlns:model="using:EatConscious.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EatConscious.Views.CalendarView"
              x:DataType="vm:MainWindowViewModel">
 
-    <TextBlock Text="Calendar grid coming soon" Margin="10"/>
+    <UserControl.Styles>
+        <Style Selector="Border.dayCell">
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="0.5"/>
+            <Setter Property="MinHeight" Value="90"/>
+        </Style>
+        <Style Selector="Border.dayCell.otherMonth">
+            <Setter Property="Opacity" Value="0.4"/>
+        </Style>
+        <Style Selector="Border.dayCell.today">
+            <Setter Property="BorderBrush" Value="DodgerBlue"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+        </Style>
+        <Style Selector="Button.addButton">
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+        </Style>
+        <Style Selector="Border.dayCell:pointerover Button.addButton">
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
+        <Style Selector="Button.removeButton">
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+        </Style>
+        <Style Selector="Border.mealEntry:pointerover Button.removeButton">
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
+    </UserControl.Styles>
+
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto * Auto Auto" Margin="5">
+            <Button Grid.Column="0" Content="&lt;" Command="{Binding PrevMonthCommand}"/>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       FontWeight="Bold" FontSize="16"
+                       Text="{Binding CurrentMonth, StringFormat='{}{0:MMMM yyyy}'}"/>
+            <Button Grid.Column="2" Content="&gt;" Command="{Binding NextMonthCommand}"/>
+            <Button Grid.Column="3" Content="Today" Command="{Binding TodayCommand}" Margin="10 0 0 0"/>
+        </Grid>
+
+        <UniformGrid DockPanel.Dock="Top" Columns="7" Margin="5 0">
+            <TextBlock Text="Mon" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+            <TextBlock Text="Tue" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+            <TextBlock Text="Wed" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+            <TextBlock Text="Thu" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+            <TextBlock Text="Fri" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+            <TextBlock Text="Sat" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+            <TextBlock Text="Sun" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+        </UniformGrid>
+
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding CalendarDays}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="7"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:CalendarDayViewModel">
+                        <Border Classes="dayCell" Classes.otherMonth="{Binding !IsCurrentMonth}"
+                                Classes.today="{Binding IsToday}">
+                            <Grid RowDefinitions="Auto *">
+                                <Grid Grid.Row="0" ColumnDefinitions="* Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding Date.Day}" Margin="4"/>
+                                    <Button Grid.Column="1" Classes="addButton" Margin="0 2 2 0"
+                                            Command="{Binding TogglePickerCommand}"
+                                            Loaded="AddRecipeButton_OnLoaded">
+                                        <Button.Content>
+                                            <TextBlock Text="+" FontSize="12" HorizontalAlignment="Center"/>
+                                        </Button.Content>
+                                        <Button.Flyout>
+                                            <!-- Flyout.IsOpen is a read-only direct property in Avalonia 11 (binding to
+                                                 it throws "The property IsOpen is readonly" and crashes the app), so
+                                                 it can't be set declaratively here. Clicking this Button opens the
+                                                 Flyout automatically; CalendarView.axaml.cs closes it again when
+                                                 AddRecipeCommand flips IsPickerOpen back to false. -->
+                                            <Flyout Placement="Bottom">
+                                                <ListBox ItemsSource="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).Recipes}"
+                                                         MaxHeight="200" MinWidth="150">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate DataType="model:Recipe">
+                                                            <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                                                    Background="Transparent" BorderThickness="0"
+                                                                    Command="{Binding $parent[ListBox].((vm:CalendarDayViewModel)DataContext).AddRecipeCommand}"
+                                                                    CommandParameter="{Binding .}">
+                                                                <TextBlock Text="{Binding Name}"/>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                </Grid>
+
+                                <ItemsControl Grid.Row="1" ItemsSource="{Binding Entries}" Margin="2">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>

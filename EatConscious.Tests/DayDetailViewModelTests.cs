@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using EatConscious.Models;
 using EatConscious.ViewModels;
@@ -13,13 +14,13 @@ public class DayDetailViewModelTests
     [Fact]
     public void Entries_ContainsOnlyThatDay()
     {
-        var main = new MainWindowViewModel();
+        var calendar = new CalendarViewModel(new FakeMediator(), new List<MealPlanEntry>());
         var recipe = new Recipe { Id = 1, Name = "Soup" };
-        main.AddMealPlanEntry(Day, recipe);
-        main.AddMealPlanEntry(Day, recipe);
-        main.AddMealPlanEntry(Day.AddDays(1), recipe);
+        calendar.AddMealPlanEntry(Day, recipe);
+        calendar.AddMealPlanEntry(Day, recipe);
+        calendar.AddMealPlanEntry(Day.AddDays(1), recipe);
 
-        var detail = new DayDetailViewModel(Day, main);
+        var detail = new DayDetailViewModel(Day, calendar);
 
         Assert.Equal(2, detail.Entries.Count);
         Assert.All(detail.Entries, e => Assert.Equal(Day, e.Date));
@@ -28,17 +29,17 @@ public class DayDetailViewModelTests
     [Fact]
     public void RemoveEntry_RemovesOnlyThatEntryFromDetailAndMealPlan()
     {
-        var main = new MainWindowViewModel();
+        var calendar = new CalendarViewModel(new FakeMediator(), new List<MealPlanEntry>());
         var recipe = new Recipe { Id = 1, Name = "Soup" };
-        main.AddMealPlanEntry(Day, recipe);
-        main.AddMealPlanEntry(Day, recipe);
-        main.AddMealPlanEntry(Day.AddDays(1), recipe);
-        var detail = new DayDetailViewModel(Day, main);
+        calendar.AddMealPlanEntry(Day, recipe);
+        calendar.AddMealPlanEntry(Day, recipe);
+        calendar.AddMealPlanEntry(Day.AddDays(1), recipe);
+        var detail = new DayDetailViewModel(Day, calendar);
 
         detail.RemoveEntryCommand.Execute(detail.Entries[0]).Subscribe();
 
         Assert.Single(detail.Entries);
-        Assert.Equal(1, main.MealPlan.Count(e => e.Date == Day));
-        Assert.Equal(1, main.MealPlan.Count(e => e.Date == Day.AddDays(1)));
+        Assert.Equal(1, calendar.MealPlan.Count(e => e.Date == Day));
+        Assert.Equal(1, calendar.MealPlan.Count(e => e.Date == Day.AddDays(1)));
     }
 }

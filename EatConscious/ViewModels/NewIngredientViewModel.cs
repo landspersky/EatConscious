@@ -67,27 +67,27 @@ public class NewIngredientViewModel : ViewModelBase
             id, Name, nutrients, NutrientBase, Price, PriceBase, SelectedUnit, SelectedTags.ToList());
     }
 
-    public void ButtonClick() => _mainModel.AddOrUpdate(CreateIngredient());
+    public void ButtonClick() => _mediator.IngredientSaved(CreateIngredient());
     
-    private readonly MainWindowViewModel _mainModel;
+    private readonly IMainMediator _mediator;
 
     /// <summary>
     /// View model for creating a new ingredient
     /// </summary>
-    /// <param name="mainModel">Parent view model</param>
-    public NewIngredientViewModel(MainWindowViewModel mainModel)
+    /// <param name="mediator">Mediator to announce the saved ingredient to</param>
+    public NewIngredientViewModel(IMainMediator mediator)
     {
-        _mainModel = mainModel;
-        Tags = mainModel.IngredientTags;
+        _mediator = mediator;
+        Tags = mediator.IngredientTags;
     }
 
     /// <summary>
     /// View model for editing an ingredient
     /// </summary>
-    /// <param name="mainModel">Parent view model</param>
+    /// <param name="mediator">Mediator to announce the saved ingredient to</param>
     /// <param name="openedFrom">Ingredient to edit</param>
-    public NewIngredientViewModel(MainWindowViewModel mainModel, Ingredient openedFrom) 
-        : this(mainModel)
+    public NewIngredientViewModel(IMainMediator mediator, Ingredient openedFrom) 
+        : this(mediator)
     {
         Name = openedFrom.Name;
         SelectedUnit = openedFrom.Unit;

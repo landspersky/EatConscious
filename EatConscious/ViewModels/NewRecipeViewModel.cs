@@ -52,9 +52,9 @@ public class NewRecipeViewModel : ViewModelBase
         };
     }
     
-    public void ButtonClick() => _mainModel.AddOrUpdate(CreateRecipe());
+    public void ButtonClick() => _mediator.RecipeSaved(CreateRecipe());
     
-    private readonly MainWindowViewModel _mainModel;
+    private readonly IMainMediator _mediator;
 
     /// <summary>
     /// Fills up <see cref="Ingredients"/>
@@ -68,7 +68,7 @@ public class NewRecipeViewModel : ViewModelBase
             editingPortions = _editing.Ingredients.ToDictionary(k => k.Ingredient.Id, v => v.Value);
         }
         
-        Ingredients = _mainModel.Ingredients.Select(x => new IngredientPortion()
+        Ingredients = _mediator.AllIngredients.Select(x => new IngredientPortion()
         {
             Ingredient = x,
             Value = editingPortions.GetValueOrDefault(x.Id, 0),
@@ -78,23 +78,23 @@ public class NewRecipeViewModel : ViewModelBase
     /// <summary>
     /// View model for creating a new recipe
     /// </summary>
-    /// <param name="mainModel">Parent view model</param>
-    public NewRecipeViewModel(MainWindowViewModel mainModel)
+    /// <param name="mediator">Mediator to announce the saved recipe to</param>
+    public NewRecipeViewModel(IMainMediator mediator)
     {
-        _mainModel = mainModel;
-        Tags = mainModel.RecipeTags;
+        _mediator = mediator;
+        Tags = mediator.RecipeTags;
         InitIngredients();
     }
 
     /// <summary>
     /// View model for editing a recipe
     /// </summary>
-    /// <param name="mainModel">Parent view model</param>
+    /// <param name="mediator">Mediator to announce the saved recipe to</param>
     /// <param name="openedFrom">Recipe to edit</param>
-    public NewRecipeViewModel(MainWindowViewModel mainModel, Recipe openedFrom)
+    public NewRecipeViewModel(IMainMediator mediator, Recipe openedFrom)
     {
-        _mainModel = mainModel;
-        Tags = mainModel.RecipeTags;
+        _mediator = mediator;
+        Tags = mediator.RecipeTags;
         Name = openedFrom.Name;
         Note = openedFrom.Note;
         SelectedTags = new(openedFrom.Tags);

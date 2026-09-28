@@ -43,38 +43,41 @@
                 </DataTemplate>
         </Window.DataTemplates>
         
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5" MinWidth="250">
-                <DockPanel>
-                        <TextBlock Text="Name"/>
-                        <WrapPanel>
-                                <TextBox Text="{Binding Name}" MinWidth="150"/>
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Tags" VerticalAlignment="Top"/>
-                        <WrapPanel>
-                                <controls:TagSelector ItemsSource="{Binding Tags}"
-                                                      SelectedItems="{Binding SelectedTags, Mode=OneWayToSource}"/>
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Ingredients"/>
-                </DockPanel>
-                <ScrollViewer>
-                        <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Single,Toggle"
-                                 MaxHeight="250">
-                                <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                                <VirtualizingStackPanel />
-                                        </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                        </ListBox>
-                </ScrollViewer>
-                <DockPanel>
-                        <TextBlock Text="Note"/>
-                </DockPanel>
-                <TextBox Text="{Binding Note}" TextWrapping="Wrap" AcceptsReturn="True" 
-                         Width="250" MaxHeight="250" HorizontalAlignment="Stretch"/>
-                <Button HorizontalAlignment="Center" Content="{Binding ButtonText}" Command="{Binding ButtonClick}"/>
-        </StackPanel>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5" MinWidth="250"
+                                    Margin="10">
+                        <DockPanel>
+                                <TextBlock Text="Name"/>
+                                <WrapPanel>
+                                        <TextBox Text="{Binding Name}" MinWidth="150"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Tags" VerticalAlignment="Top"/>
+                                <WrapPanel>
+                                        <controls:TagSelector ItemsSource="{Binding Tags}"
+                                                              SelectedItems="{Binding SelectedTags, Mode=OneWayToSource}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Ingredients"/>
+                        </DockPanel>
+                        <ScrollViewer>
+                                <ListBox ItemsSource="{Binding Ingredients}" SelectionMode="Single,Toggle"
+                                         MaxHeight="250">
+                                        <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                        <VirtualizingStackPanel />
+                                                </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                </ListBox>
+                        </ScrollViewer>
+                        <DockPanel>
+                                <TextBlock Text="Note"/>
+                        </DockPanel>
+                        <TextBox Text="{Binding Note}" TextWrapping="Wrap" AcceptsReturn="True" 
+                                 Width="250" MaxHeight="250" HorizontalAlignment="Stretch"/>
+                        <Button HorizontalAlignment="Center" Content="{Binding ButtonText}" Command="{Binding ButtonClick}"/>
+                </StackPanel>
+        </ScrollViewer>
 </Window>

@@ -34,75 +34,78 @@
         </Window.Styles>
         
         
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5" MinWidth="150">
-                <DockPanel>
-                        <TextBlock Text="Name" />
-                        <WrapPanel>
-                                <TextBox Text="{Binding Name}" />
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Unit" />
-                        <WrapPanel>
-                                <ComboBox ItemsSource="{Binding Units}"
-                                          DisplayMemberBinding="{Binding Name}"
-                                          SelectedItem="{Binding SelectedUnit, Mode=TwoWay}"/>
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Tags" VerticalAlignment="Top"/>
-                        <WrapPanel>
-                                <controls:TagSelector ItemsSource="{Binding Tags}"
-                                                      SelectedItems="{Binding SelectedTags, Mode=OneWayToSource}"/>
-                        </WrapPanel>
-                </DockPanel>
-                <Separator />
-                <DockPanel>
-                        <TextBlock Text="Kcal" />
-                        <WrapPanel>
-                                <controls:FeatureInput Value="{Binding Kcal, Mode=OneWayToSource}"/>
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Protein" />
-                        <WrapPanel>
-                                <controls:FeatureInput Value="{Binding Protein, Mode=OneWayToSource}"/>
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Carbs" />
-                        <WrapPanel>
-                                <controls:FeatureInput Value="{Binding Carbs, Mode=OneWayToSource}"/>
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Fats" />
-                        <WrapPanel>
-                                <controls:FeatureInput Value="{Binding Fats, Mode=OneWayToSource}"/>
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Per"/>
-                        <WrapPanel>
-                                <controls:BaseInput Value="{Binding NutrientBase, Mode=OneWayToSource}"/>
-                                <TextBlock Text="{Binding SelectedUnit.Id}" />
-                        </WrapPanel>
-                </DockPanel>
-                <Separator />
-                <DockPanel>
-                        <TextBlock Text="Price" />
-                        <WrapPanel>
-                                <controls:FeatureInput Value="{Binding Price, Mode=OneWayToSource}"/>
-                        </WrapPanel>
-                </DockPanel>
-                <DockPanel>
-                        <TextBlock Text="Per"/>
-                        <WrapPanel>
-                                <controls:BaseInput Value="{Binding PriceBase, Mode=OneWayToSource}"/>
-                                <TextBlock Text="{Binding SelectedUnit.Id}" />
-                        </WrapPanel>
-                </DockPanel>
-                <Button HorizontalAlignment="Center" Content="{Binding ButtonText}" Command="{Binding ButtonClick}"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5" MinWidth="150"
+                                    Margin="10">
+                        <DockPanel>
+                                <TextBlock Text="Name" />
+                                <WrapPanel>
+                                        <TextBox Text="{Binding Name}" />
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Unit" />
+                                <WrapPanel>
+                                        <ComboBox ItemsSource="{Binding Units}"
+                                                  DisplayMemberBinding="{Binding Name}"
+                                                  SelectedItem="{Binding SelectedUnit, Mode=TwoWay}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Tags" VerticalAlignment="Top"/>
+                                <WrapPanel>
+                                        <controls:TagSelector ItemsSource="{Binding Tags}"
+                                                              SelectedItems="{Binding SelectedTags, Mode=OneWayToSource}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <Separator />
+                        <DockPanel>
+                                <TextBlock Text="Kcal" />
+                                <WrapPanel>
+                                        <controls:FeatureInput Value="{Binding Kcal, Mode=OneWayToSource}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Protein" />
+                                <WrapPanel>
+                                        <controls:FeatureInput Value="{Binding Protein, Mode=OneWayToSource}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Carbs" />
+                                <WrapPanel>
+                                        <controls:FeatureInput Value="{Binding Carbs, Mode=OneWayToSource}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Fats" />
+                                <WrapPanel>
+                                        <controls:FeatureInput Value="{Binding Fats, Mode=OneWayToSource}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Per"/>
+                                <WrapPanel>
+                                        <controls:BaseInput Value="{Binding NutrientBase, Mode=OneWayToSource}"/>
+                                        <TextBlock Text="{Binding SelectedUnit.Id}" />
+                                </WrapPanel>
+                        </DockPanel>
+                        <Separator />
+                        <DockPanel>
+                                <TextBlock Text="Price" />
+                                <WrapPanel>
+                                        <controls:FeatureInput Value="{Binding Price, Mode=OneWayToSource}"/>
+                                </WrapPanel>
+                        </DockPanel>
+                        <DockPanel>
+                                <TextBlock Text="Per"/>
+                                <WrapPanel>
+                                        <controls:BaseInput Value="{Binding PriceBase, Mode=OneWayToSource}"/>
+                                        <TextBlock Text="{Binding SelectedUnit.Id}" />
+                                </WrapPanel>
+                        </DockPanel>
+                        <Button HorizontalAlignment="Center" Content="{Binding ButtonText}" Command="{Binding ButtonClick}"/>
                 
-        </StackPanel>
+                </StackPanel>
+        </ScrollViewer>
 </Window>

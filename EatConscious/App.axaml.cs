@@ -20,7 +20,12 @@ public partial class App : Application
     /// Path of file containing recipes and their tags
     /// </summary>
     public const string RecipePath = "recipes.json";
-    
+
+    /// <summary>
+    /// Path of file containing the meal plan (which recipes are planned on which day)
+    /// </summary>
+    public const string MealPlanPath = "mealplan.json";
+
     private readonly MainWindowViewModel _mainModel = new();
     public override void Initialize()
     {
@@ -51,6 +56,12 @@ public partial class App : Application
 
         json = JsonSerializer.Serialize(_mainModel.WrapRecipes());
         using (var sw = new StreamWriter(RecipePath, false))
+        {
+            sw.Write(json);
+        }
+
+        json = JsonSerializer.Serialize(_mainModel.WrapMealPlan());
+        using (var sw = new StreamWriter(MealPlanPath, false))
         {
             sw.Write(json);
         }

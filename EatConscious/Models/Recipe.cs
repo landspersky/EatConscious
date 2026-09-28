@@ -15,7 +15,7 @@ public class Recipe : ISortable
 
     public string Note { get; init; } = "";
 
-    public double Price => Ingredients.Sum(x => x.Ingredient.Price * (x.Value / x.Ingredient.Unit.BaseValue));
+    public double Price => Math.Round(Ingredients.Sum(x => x.Ingredient.Price * (x.Value / x.Ingredient.Unit.BaseValue)), 2);
 
     /// <summary>
     /// Sum nutrient value of the ingredients weighted by the portion

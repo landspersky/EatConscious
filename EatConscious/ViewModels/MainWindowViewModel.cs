@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using DynamicData;
@@ -56,6 +58,13 @@ public class MainWindowViewModel : ViewModelBase
         DeleteIngredientCommand = ReactiveCommand.Create<Ingredient>(Delete);
         DeleteRecipeCommand = ReactiveCommand.Create<Recipe>(Delete);
         OnCheckCommand = ReactiveCommand.Create<Ingredient>(OnCheck);
+
+        PrevMonthCommand = ReactiveCommand.Create(() => { CurrentMonth = CurrentMonth.AddMonths(-1); });
+        NextMonthCommand = ReactiveCommand.Create(() => { CurrentMonth = CurrentMonth.AddMonths(1); });
+        TodayCommand = ReactiveCommand.Create(() => { CurrentMonth = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1); });
+        RemoveMealPlanEntryCommand = ReactiveCommand.Create<MealPlanEntry>(RemoveMealPlanEntry);
+
+        RebuildCalendarDays();
     }
     
     /// <summary>
@@ -285,6 +294,104 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Recipe, Unit> DeleteRecipeCommand { get; }
 
     private void Delete(Recipe recipe) => _recipeCache.Remove(recipe);
+    #endregion
+
+    #region CALENDAR
+    /// <summary>
+    /// Every recipe planned for every day; the source of truth for <see cref="CalendarDays"/>.
+    /// </summary>
+    public ObservableCollection<MealPlanEntry> MealPlan { get; } = new(State.OnLoad.MealPlan);
+
+    private DateOnly _currentMonth = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1);
+    /// <summary>
+    /// The first day of the month currently displayed in the calendar grid.
+    /// </summary>
+    public DateOnly CurrentMonth
+    {
+        get => _currentMonth;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _currentMonth, value);
+            RebuildCalendarDays();
+        }
+    }
+
+    private bool _showDaySummaries = true;
+    /// <summary>
+    /// Toggles the per-day nutrient totals in every calendar cell.
+    /// </summary>
+    public bool ShowDaySummaries
+    {
+        get => _showDaySummaries;
+        set => this.RaiseAndSetIfChanged(ref _showDaySummaries, value);
+    }
+
+    public ReactiveCommand<Unit, Unit> PrevMonthCommand { get; }
+    public ReactiveCommand<Unit, Unit> NextMonthCommand { get; }
+    public ReactiveCommand<Unit, Unit> TodayCommand { get; }
+
+    private ReadOnlyObservableCollection<CalendarDayViewModel> _calendarDays;
+    /// <summary>
+    /// One entry per rendered grid cell (includes leading/trailing days of adjacent months).
+    /// </summary>
+    public ReadOnlyObservableCollection<CalendarDayViewModel> CalendarDays => _calendarDays;
+
+    /// <summary>
+    /// Rebuilds <see cref="CalendarDays"/> for the current <see cref="CurrentMonth"/> from <see cref="MealPlan"/>.
+    /// </summary>
+    private void RebuildCalendarDays()
+    {
+        var days = CalendarMonthBuilder.BuildDays(CurrentMonth);
+        var dayViewModels = days.Select(date => new CalendarDayViewModel(
+            date,
+            isCurrentMonth: date.Month == CurrentMonth.Month && date.Year == CurrentMonth.Year,
+            entries: MealPlan.Where(x => x.Date == date),
+            onAddRecipe: AddMealPlanEntry,
+            onOpenDetail: OpenDayDetail)).ToList();
+
+        _calendarDays = new ReadOnlyObservableCollection<CalendarDayViewModel>(new ObservableCollection<CalendarDayViewModel>(dayViewModels));
+        this.RaisePropertyChanged(nameof(CalendarDays));
+    }
+
+    /// <summary>
+    /// Adds a recipe to the given day and refreshes the grid.
+    /// </summary>
+    public void AddMealPlanEntry(DateOnly date, Recipe recipe)
+    {
+        MealPlan.Add(new MealPlanEntry { Date = date, Recipe = recipe });
+        RebuildCalendarDays();
+    }
+
+    /// <summary>
+    /// Command for removing a single recipe from a single day.
+    /// </summary>
+    public ReactiveCommand<MealPlanEntry, Unit> RemoveMealPlanEntryCommand { get; }
+
+    public void RemoveMealPlanEntry(MealPlanEntry entry)
+    {
+        MealPlan.Remove(entry);
+        RebuildCalendarDays();
+    }
+
+    /// <summary>
+    /// Opens the detail of a single day. It's modal, so the meal plan can't change behind its back.
+    /// </summary>
+    private void OpenDayDetail(DateOnly date)
+    {
+        var window = new DayDetailWindow(new DayDetailViewModel(date, this));
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
+        {
+            window.ShowDialog(owner);
+        }
+    }
+
+    public MealPlanWrapper WrapMealPlan()
+    {
+        return new MealPlanWrapper()
+        {
+            Entries = MealPlan.Select(x => x.Strip()).ToList(),
+        };
+    }
     #endregion
 
     /// <summary>

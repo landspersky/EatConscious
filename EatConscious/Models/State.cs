@@ -19,12 +19,14 @@ public class State
     
     public List<Recipe> Recipes { get; private init; }
     public List<string> RecipeTags { get; private init; }
-    
+
     /// <summary>
     /// Highest <see cref="Recipe"/> Id for assigning to new objects
     /// </summary>
     public static int TopRecipeId { get; private set; }
     public static void IncrementRecipeId() => TopRecipeId++;
+
+    public List<MealPlanEntry> MealPlan { get; private init; }
 
     private static State Load()
     {
@@ -35,13 +37,17 @@ public class State
         var recipes = UnwrapRecipes(RecipeWrapper.StateOnLoad, ingredients.ToDictionary(x => x.Id, x => x));
         var recipeTags = RecipeWrapper.StateOnLoad.Tags;
         TopRecipeId = recipes.Count == 0 ? 0 : recipes.Max(x => x.Id);
-        
+
+        var recipesById = recipes.ToDictionary(x => x.Id, x => x);
+        var mealPlan = UnwrapMealPlan(MealPlanWrapper.StateOnLoad, recipesById);
+
         return new State()
         {
             Ingredients = ingredients,
             IngredientTags = ingredientTags,
             Recipes = recipes,
             RecipeTags = recipeTags,
+            MealPlan = mealPlan,
         };
     }
 
@@ -77,7 +83,7 @@ public class State
             Ingredient = ingredients[ingredientPortion.Id],
             Value = ingredientPortion.Value,
         };
-        
+
         return wrapper.Recipes.Select(recipe => new Recipe()
         {
             Id = recipe.Id,
@@ -86,5 +92,20 @@ public class State
             Tags = recipe.Tags,
             Note = recipe.Note,
         }).ToList();
+    }
+
+    /// <summary>
+    /// Resolves recipe ids into <see cref="MealPlanEntry"/>s, skipping entries whose recipe
+    /// no longer exists (e.g. the recipe was deleted since the entry was saved).
+    /// </summary>
+    private static List<MealPlanEntry> UnwrapMealPlan(MealPlanWrapper wrapper, Dictionary<int, Recipe> recipes)
+    {
+        return wrapper.Entries
+            .Where(x => recipes.ContainsKey(x.RecipeId))
+            .Select(x => new MealPlanEntry()
+            {
+                Date = x.Date,
+                Recipe = recipes[x.RecipeId],
+            }).ToList();
     }
 }

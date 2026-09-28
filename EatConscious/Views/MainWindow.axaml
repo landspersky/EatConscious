@@ -69,6 +69,29 @@
                 </Button>
             </DockPanel>
         </DataTemplate>
+
+        <DataTemplate DataType="model:MealPlanEntry">
+            <Border Classes="mealEntry">
+                <DockPanel>
+                    <!-- This template is only ever used inside CalendarView's per-day "Entries" ItemsControl,
+                         whose own DataContext is the day's CalendarDayViewModel (not MainWindowViewModel), so
+                         $parent[ItemsControl] would resolve to that ItemsControl and the cast to
+                         MainWindowViewModel would fail at runtime. Walk up to the nearest UserControl
+                         (CalendarView itself) instead, which does have MainWindowViewModel as its DataContext. -->
+                    <Button DockPanel.Dock="Right" Classes="removeButton" HorizontalAlignment="Right"
+                            Command="{Binding $parent[UserControl].((vm:MainWindowViewModel)DataContext).RemoveMealPlanEntryCommand}"
+                            CommandParameter="{Binding .}">
+                        <Button.Content>
+                            <Image Source="/Assets/trash-can-outline.png" Width="18" Height="18"/>
+                        </Button.Content>
+                    </Button>
+
+                    <!-- Same height as the 24px remove button; long names are trimmed to keep rows uniform -->
+                    <TextBlock Text="{Binding Recipe.Name}" FontSize="13" VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" Margin="4 0"/>
+                </DockPanel>
+            </Border>
+        </DataTemplate>
     </Window.DataTemplates>
     
     <Window.Styles>
@@ -142,7 +165,10 @@
                     </ListBox>
                 </ScrollViewer>
             </Grid>
-            
+
+        </TabItem>
+        <TabItem Header="Calendar">
+            <view:CalendarView/>
         </TabItem>
     </TabControl>
 

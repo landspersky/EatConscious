@@ -82,16 +82,13 @@
                             Command="{Binding $parent[UserControl].((vm:MainWindowViewModel)DataContext).RemoveMealPlanEntryCommand}"
                             CommandParameter="{Binding .}">
                         <Button.Content>
-                            <TextBlock Text="×" FontSize="14"/>
+                            <Image Source="/Assets/trash-can-outline.png" Width="18" Height="18"/>
                         </Button.Content>
                     </Button>
 
-                    <Button Classes="autoSize" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                            Background="Transparent" BorderThickness="0"
-                            Command="{Binding $parent[UserControl].((vm:MainWindowViewModel)DataContext).OpenRecipeDetailCommand}"
-                            CommandParameter="{Binding Recipe}">
-                        <TextBlock Text="{Binding Recipe.Name}" TextWrapping="Wrap"/>
-                    </Button>
+                    <!-- Same height as the 24px remove button; long names are trimmed to keep rows uniform -->
+                    <TextBlock Text="{Binding Recipe.Name}" FontSize="13" VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" Margin="4 0"/>
                 </DockPanel>
             </Border>
         </DataTemplate>

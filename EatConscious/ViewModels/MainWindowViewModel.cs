@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using DynamicData;
@@ -61,7 +63,6 @@ public class MainWindowViewModel : ViewModelBase
         NextMonthCommand = ReactiveCommand.Create(() => { CurrentMonth = CurrentMonth.AddMonths(1); });
         TodayCommand = ReactiveCommand.Create(() => { CurrentMonth = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1); });
         RemoveMealPlanEntryCommand = ReactiveCommand.Create<MealPlanEntry>(RemoveMealPlanEntry);
-        OpenRecipeDetailCommand = ReactiveCommand.Create<Recipe>(OpenRecipeDetail);
 
         RebuildCalendarDays();
     }
@@ -315,6 +316,16 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private bool _showDaySummaries = true;
+    /// <summary>
+    /// Toggles the per-day nutrient totals in every calendar cell.
+    /// </summary>
+    public bool ShowDaySummaries
+    {
+        get => _showDaySummaries;
+        set => this.RaiseAndSetIfChanged(ref _showDaySummaries, value);
+    }
+
     public ReactiveCommand<Unit, Unit> PrevMonthCommand { get; }
     public ReactiveCommand<Unit, Unit> NextMonthCommand { get; }
     public ReactiveCommand<Unit, Unit> TodayCommand { get; }
@@ -335,7 +346,8 @@ public class MainWindowViewModel : ViewModelBase
             date,
             isCurrentMonth: date.Month == CurrentMonth.Month && date.Year == CurrentMonth.Year,
             entries: MealPlan.Where(x => x.Date == date),
-            onAddRecipe: AddMealPlanEntry)).ToList();
+            onAddRecipe: AddMealPlanEntry,
+            onOpenDetail: OpenDayDetail)).ToList();
 
         _calendarDays = new ReadOnlyObservableCollection<CalendarDayViewModel>(new ObservableCollection<CalendarDayViewModel>(dayViewModels));
         this.RaisePropertyChanged(nameof(CalendarDays));
@@ -355,21 +367,22 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<MealPlanEntry, Unit> RemoveMealPlanEntryCommand { get; }
 
-    private void RemoveMealPlanEntry(MealPlanEntry entry)
+    public void RemoveMealPlanEntry(MealPlanEntry entry)
     {
         MealPlan.Remove(entry);
         RebuildCalendarDays();
     }
 
     /// <summary>
-    /// Command for opening the read-only detail popup for a recipe.
+    /// Opens the detail of a single day. It's modal, so the meal plan can't change behind its back.
     /// </summary>
-    public ReactiveCommand<Recipe, Unit> OpenRecipeDetailCommand { get; }
-
-    private void OpenRecipeDetail(Recipe recipe)
+    private void OpenDayDetail(DateOnly date)
     {
-        var window = new RecipeDetailWindow(recipe);
-        window.Show();
+        var window = new DayDetailWindow(new DayDetailViewModel(date, this));
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
+        {
+            window.ShowDialog(owner);
+        }
     }
 
     public MealPlanWrapper WrapMealPlan()

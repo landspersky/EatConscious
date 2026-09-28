@@ -1,0 +1,67 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:EatConscious.ViewModels"
+        xmlns:model="using:EatConscious.Models"
+        xmlns:view="using:EatConscious.Views"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="500"
+        x:Class="EatConscious.Views.DayDetailWindow"
+        x:DataType="vm:DayDetailViewModel"
+        Title="Day detail"
+        Icon="/Assets/apple.png"
+        Width="450"
+        Height="500"
+        MinWidth="300"
+        MinHeight="250"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Styles>
+        <!-- Day header is larger than the per-recipe RecipeViews below it -->
+        <Style Selector="StackPanel.dayTotals TextBlock">
+            <Setter Property="FontSize" Value="15"/>
+            <!--<Setter Property="FontWeight" Value="SemiBold"/>-->
+        </Style>
+        <Style Selector="WrapPanel.totals TextBlock">
+            <Setter Property="Margin" Value="0 3 12 0"/>
+        </Style>
+    </Window.Styles>
+
+    <DockPanel Margin="10">
+        <TextBlock DockPanel.Dock="Top" FontWeight="Bold" FontSize="24"
+                   Text="{Binding Date, StringFormat='{}{0:dddd, d MMMM yyyy}'}"/>
+
+        <StackPanel DockPanel.Dock="Top" Classes="dayTotals" Margin="0 2 0 12">
+            <WrapPanel Classes="totals" DataContext="{Binding TotalNutrients}">
+                <TextBlock Text="{Binding Protein, StringFormat=Protein: {0}}"/>
+                <TextBlock Text="{Binding Carbs, StringFormat=Carbs: {0}}"/>
+                <TextBlock Text="{Binding Fats, StringFormat=Fats: {0}}"/>
+                <TextBlock Text="{Binding Kcal, StringFormat=Kcal: {0}}"/>
+            </WrapPanel>
+            <TextBlock Text="{Binding TotalPrice, StringFormat=Price: {0}}" Margin="0 3 0 0"/>
+        </StackPanel>
+
+        <TextBlock DockPanel.Dock="Top" Text="No recipes planned for this day." Foreground="Gray"
+                   IsVisible="{Binding !HasEntries}"/>
+
+        <ScrollViewer>
+            <!-- Right margin keeps the overlay scrollbar off the delete buttons -->
+            <ItemsControl ItemsSource="{Binding Entries}" Margin="0 0 14 0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="model:MealPlanEntry">
+                        <Border BorderBrush="LightGray" BorderThickness="0 1 0 0" Padding="0 6">
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" VerticalAlignment="Top" Width="40" Height="40"
+                                        Command="{Binding $parent[Window].((vm:DayDetailViewModel)DataContext).RemoveEntryCommand}"
+                                        CommandParameter="{Binding .}">
+                                    <Image Source="/Assets/trash-can-outline.png" Width="24" Height="24"/>
+                                </Button>
+                                <view:RecipeView DataContext="{Binding Recipe}"/>
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

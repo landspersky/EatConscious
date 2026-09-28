@@ -11,8 +11,11 @@
     <UserControl.Styles>
         <Style Selector="Border.dayCell">
             <Setter Property="BorderBrush" Value="Gray"/>
-            <Setter Property="BorderThickness" Value="0.5"/>
+            <!-- Each cell draws only its left/top edge; the wrapping Border around the grid draws the outer right/bottom -->
+            <Setter Property="BorderThickness" Value="1 1 0 0"/>
             <Setter Property="MinHeight" Value="90"/>
+            <!-- Makes the empty parts of the cell hit-testable for double-click -->
+            <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="Border.dayCell.otherMonth">
             <Setter Property="Opacity" Value="0.4"/>
@@ -21,21 +24,39 @@
             <Setter Property="BorderBrush" Value="DodgerBlue"/>
             <Setter Property="BorderThickness" Value="1.5"/>
         </Style>
-        <Style Selector="Button.addButton">
+        <!-- Small square buttons inside day cells ("+" and the trash bin) -->
+        <Style Selector="Button.addButton, Button.removeButton">
             <Setter Property="Opacity" Value="0"/>
-            <Setter Property="Width" Value="20"/>
-            <Setter Property="Height" Value="20"/>
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+            <!-- Fluent's default Button padding (8,5,8,6) leaves no room for content in a button this small -->
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style Selector="Border.dayCell:pointerover Button.addButton">
             <Setter Property="Opacity" Value="1"/>
         </Style>
-        <Style Selector="Button.removeButton">
-            <Setter Property="Opacity" Value="0"/>
-            <Setter Property="Width" Value="20"/>
-            <Setter Property="Height" Value="20"/>
+        <Style Selector="Border.mealEntry">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="CornerRadius" Value="3"/>
+        </Style>
+        <Style Selector="Border.mealEntry:pointerover">
+            <Setter Property="Background" Value="#14000000"/>
         </Style>
         <Style Selector="Border.mealEntry:pointerover Button.removeButton">
             <Setter Property="Opacity" Value="1"/>
+        </Style>
+        <Style Selector="Button.moreButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4 0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style Selector="TextBlock.daySummary">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="DimGray"/>
+            <Setter Property="Margin" Value="0 0 6 0"/>
         </Style>
         <Style Selector="Button.autoSize">
             <Setter Property="Width" Value="NaN"/>
@@ -44,16 +65,18 @@
     </UserControl.Styles>
 
     <DockPanel>
-        <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto * Auto Auto" Margin="5">
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto * Auto Auto Auto" Margin="5">
             <Button Grid.Column="0" Content="&lt;" Command="{Binding PrevMonthCommand}"/>
             <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                        FontWeight="Bold" FontSize="16"
                        Text="{Binding CurrentMonth, StringFormat='{}{0:MMMM yyyy}'}"/>
             <Button Grid.Column="2" Content="&gt;" Command="{Binding NextMonthCommand}"/>
             <Button Grid.Column="3" Classes="autoSize" Content="Today" Command="{Binding TodayCommand}" Margin="10 0 0 0"/>
+            <CheckBox Grid.Column="4" Content="Daily totals" IsChecked="{Binding ShowDaySummaries}" Margin="10 0 0 0"/>
         </Grid>
 
-        <UniformGrid DockPanel.Dock="Top" Columns="7" Margin="5 0">
+        <!-- Right inset matches the ScrollViewer padding below so the columns line up with the cells -->
+        <UniformGrid DockPanel.Dock="Top" Columns="7" Margin="0 0 12 0">
             <TextBlock Text="Mon" HorizontalAlignment="Center" FontWeight="SemiBold"/>
             <TextBlock Text="Tue" HorizontalAlignment="Center" FontWeight="SemiBold"/>
             <TextBlock Text="Wed" HorizontalAlignment="Center" FontWeight="SemiBold"/>
@@ -63,64 +86,77 @@
             <TextBlock Text="Sun" HorizontalAlignment="Center" FontWeight="SemiBold"/>
         </UniformGrid>
 
-        <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding CalendarDays}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="7"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="vm:CalendarDayViewModel">
-                        <Border Classes="dayCell" Classes.otherMonth="{Binding !IsCurrentMonth}"
-                                Classes.today="{Binding IsToday}">
-                            <Grid RowDefinitions="Auto *">
-                                <Grid Grid.Row="0" ColumnDefinitions="* Auto">
-                                    <TextBlock Grid.Column="0" Text="{Binding Date.Day}" Margin="4"/>
-                                    <Button Grid.Column="1" Name="AddRecipeButton" Classes="addButton" Margin="0 2 2 0"
-                                            Command="{Binding TogglePickerCommand}">
-                                        <Button.Content>
-                                            <TextBlock Text="+" FontSize="12" HorizontalAlignment="Center"/>
-                                        </Button.Content>
-                                    </Button>
-                                    <!-- Popup.IsOpen (unlike Flyout.IsOpen) is a normal settable styled property,
-                                         so IsPickerOpen is the single source of truth here: TogglePickerCommand is
-                                         the only thing that opens/closes this, with no code-behind synchronization
-                                         needed. -->
-                                    <Popup Grid.Column="1" PlacementTarget="{Binding #AddRecipeButton}"
-                                           Placement="Bottom" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}"
-                                           IsLightDismissEnabled="True">
-                                        <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                                                BorderBrush="Gray" BorderThickness="1">
-                                            <ListBox ItemsSource="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).Recipes}"
-                                                     MaxHeight="200" MinWidth="150">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate DataType="model:Recipe">
-                                                        <Button Classes="autoSize" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                                                                Background="Transparent" BorderThickness="0"
-                                                                Command="{Binding $parent[ListBox].((vm:CalendarDayViewModel)DataContext).AddRecipeCommand}"
-                                                                CommandParameter="{Binding .}">
-                                                            <TextBlock Text="{Binding Name}"/>
-                                                        </Button>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </Border>
-                                    </Popup>
-                                </Grid>
+        <!-- The scrollbar overlays content; the padding keeps it (and the clip edge) off the cells' right border -->
+        <ScrollViewer Padding="0 0 12 0">
+            <Border BorderBrush="Gray" BorderThickness="0 0 1 1">
+                <ItemsControl ItemsSource="{Binding CalendarDays}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="7"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:CalendarDayViewModel">
+                            <Border Classes="dayCell" Classes.otherMonth="{Binding !IsCurrentMonth}"
+                                    Classes.today="{Binding IsToday}" DoubleTapped="DayCell_OnDoubleTapped">
+                                <Grid RowDefinitions="Auto * Auto">
+                                    <Grid Grid.Row="0" ColumnDefinitions="* Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding Date.Day}" Margin="4"/>
+                                        <Button Grid.Column="1" Name="AddRecipeButton" Classes="addButton" Margin="0 2 2 0"
+                                                Command="{Binding TogglePickerCommand}">
+                                            <Button.Content>
+                                                <TextBlock Text="+" FontSize="14" HorizontalAlignment="Center"/>
+                                            </Button.Content>
+                                        </Button>
+                                        <!-- Popup.IsOpen (unlike Flyout.IsOpen) is a normal settable styled property,
+                                             so IsPickerOpen is the single source of truth here: TogglePickerCommand is
+                                             the only thing that opens/closes this, with no code-behind synchronization
+                                             needed. -->
+                                        <Popup Grid.Column="1" PlacementTarget="{Binding #AddRecipeButton}"
+                                               Placement="Bottom" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}"
+                                               IsLightDismissEnabled="True">
+                                            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                                                    BorderBrush="Gray" BorderThickness="1">
+                                                <ListBox ItemsSource="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).Recipes}"
+                                                         MaxHeight="200" MinWidth="150">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate DataType="model:Recipe">
+                                                            <Button Classes="autoSize" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                                                    Background="Transparent" BorderThickness="0"
+                                                                    Command="{Binding $parent[ListBox].((vm:CalendarDayViewModel)DataContext).AddRecipeCommand}"
+                                                                    CommandParameter="{Binding .}">
+                                                                <TextBlock Text="{Binding Name}"/>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
 
-                                <ItemsControl Grid.Row="1" ItemsSource="{Binding Entries}" Margin="2">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                                    <!-- Only the first few entries fit; the rest is in the day detail behind "..." -->
+                                    <StackPanel Grid.Row="1" Margin="2">
+                                        <ItemsControl ItemsSource="{Binding VisibleEntries}"/>
+                                        <Button Classes="autoSize moreButton" Content="..." HorizontalAlignment="Left"
+                                                IsVisible="{Binding HasMoreEntries}" Command="{Binding OpenDetailCommand}"/>
+                                    </StackPanel>
+
+                                    <!-- Outer panel hides the summary on empty days, inner one follows the global toggle -->
+                                    <Panel Grid.Row="2" IsVisible="{Binding HasEntries}">
+                                        <WrapPanel Margin="4 0 4 4" DataContext="{Binding TotalNutrients}"
+                                                   IsVisible="{Binding $parent[UserControl].((vm:MainWindowViewModel)DataContext).ShowDaySummaries}">
+                                            <TextBlock Classes="daySummary" Text="{Binding Kcal, StringFormat='{}{0:0} kcal'}"/>
+                                            <TextBlock Classes="daySummary" Text="{Binding Protein, StringFormat='P {0:0}'}"/>
+                                            <TextBlock Classes="daySummary" Text="{Binding Carbs, StringFormat='C {0:0}'}"/>
+                                            <TextBlock Classes="daySummary" Text="{Binding Fats, StringFormat='F {0:0}'}"/>
+                                        </WrapPanel>
+                                    </Panel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
         </ScrollViewer>
     </DockPanel>
 </UserControl>

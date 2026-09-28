@@ -55,38 +55,38 @@
                                 <TextBlock Text="Tags" VerticalAlignment="Top"/>
                                 <WrapPanel>
                                         <controls:TagSelector ItemsSource="{Binding Tags}"
-                                                              SelectedItems="{Binding SelectedTags, Mode=OneWayToSource}"/>
+                                                              SelectedItems="{Binding SelectedTags, Mode=TwoWay}"/>
                                 </WrapPanel>
                         </DockPanel>
                         <Separator />
                         <DockPanel>
                                 <TextBlock Text="Kcal" />
                                 <WrapPanel>
-                                        <controls:FeatureInput Value="{Binding Kcal, Mode=OneWayToSource}"/>
+                                        <controls:FeatureInput Value="{Binding Kcal, Mode=TwoWay}"/>
                                 </WrapPanel>
                         </DockPanel>
                         <DockPanel>
                                 <TextBlock Text="Protein" />
                                 <WrapPanel>
-                                        <controls:FeatureInput Value="{Binding Protein, Mode=OneWayToSource}"/>
+                                        <controls:FeatureInput Value="{Binding Protein, Mode=TwoWay}"/>
                                 </WrapPanel>
                         </DockPanel>
                         <DockPanel>
                                 <TextBlock Text="Carbs" />
                                 <WrapPanel>
-                                        <controls:FeatureInput Value="{Binding Carbs, Mode=OneWayToSource}"/>
+                                        <controls:FeatureInput Value="{Binding Carbs, Mode=TwoWay}"/>
                                 </WrapPanel>
                         </DockPanel>
                         <DockPanel>
                                 <TextBlock Text="Fats" />
                                 <WrapPanel>
-                                        <controls:FeatureInput Value="{Binding Fats, Mode=OneWayToSource}"/>
+                                        <controls:FeatureInput Value="{Binding Fats, Mode=TwoWay}"/>
                                 </WrapPanel>
                         </DockPanel>
                         <DockPanel>
                                 <TextBlock Text="Per"/>
                                 <WrapPanel>
-                                        <controls:BaseInput Value="{Binding NutrientBase, Mode=OneWayToSource}"/>
+                                        <controls:BaseInput Value="{Binding NutrientBase, Mode=TwoWay}"/>
                                         <TextBlock Text="{Binding SelectedUnit.Id}" />
                                 </WrapPanel>
                         </DockPanel>
@@ -94,13 +94,13 @@
                         <DockPanel>
                                 <TextBlock Text="Price" />
                                 <WrapPanel>
-                                        <controls:FeatureInput Value="{Binding Price, Mode=OneWayToSource}"/>
+                                        <controls:FeatureInput Value="{Binding Price, Mode=TwoWay}"/>
                                 </WrapPanel>
                         </DockPanel>
                         <DockPanel>
                                 <TextBlock Text="Per"/>
                                 <WrapPanel>
-                                        <controls:BaseInput Value="{Binding PriceBase, Mode=OneWayToSource}"/>
+                                        <controls:BaseInput Value="{Binding PriceBase, Mode=TwoWay}"/>
                                         <TextBlock Text="{Binding SelectedUnit.Id}" />
                                 </WrapPanel>
                         </DockPanel>

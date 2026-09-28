@@ -97,6 +97,7 @@ public class NewRecipeViewModel : ViewModelBase
         Tags = mainModel.RecipeTags;
         Name = openedFrom.Name;
         Note = openedFrom.Note;
+        SelectedTags = new(openedFrom.Tags);
         _editing = openedFrom;
         InitIngredients();
     }

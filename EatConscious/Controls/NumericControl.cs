@@ -25,6 +25,17 @@ public class NumericInput : TextBox
         get => GetValue(ValueProperty);
         set => SetValue(ValueProperty, value);
     }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        // Keep the displayed text in sync when the value is set from outside (e.g. binding)
+        if (change.Property == ValueProperty)
+        {
+            Text = Value.ToString(CultureInfo.InvariantCulture);
+        }
+    }
+
     protected override void OnLostFocus(RoutedEventArgs e)
     {
         base.OnLostFocus(e);

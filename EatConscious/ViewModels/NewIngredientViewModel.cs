@@ -91,6 +91,15 @@ public class NewIngredientViewModel : ViewModelBase
     {
         Name = openedFrom.Name;
         SelectedUnit = openedFrom.Unit;
+        // Stored values are per the unit's base value
+        Kcal = openedFrom.Nutrients.Kcal;
+        Protein = openedFrom.Nutrients.Protein;
+        Carbs = openedFrom.Nutrients.Carbs;
+        Fats = openedFrom.Nutrients.Fats;
+        NutrientBase = openedFrom.Unit.BaseValue;
+        Price = openedFrom.Price;
+        PriceBase = openedFrom.Unit.BaseValue;
+        SelectedTags = new(openedFrom.Tags);
         _editing = openedFrom;
     }
 }

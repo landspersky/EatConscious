@@ -27,9 +27,10 @@
                             </Style>
                         </StackPanel.Styles>
                         <!-- TemplateBinding cannot infer DataContext hence the lengthy binding -->
+                        <!-- ItemsSource must come before SelectedItems so pre-selected items can be matched -->
                         <ListBox SelectionMode="{Binding SingleSelect, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolSelectionModeConverter}}"
-                                 SelectedItems="{Binding SelectedItems, RelativeSource={RelativeSource TemplatedParent}}"
                                  ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
+                                 SelectedItems="{Binding SelectedItems, RelativeSource={RelativeSource TemplatedParent}}"
                                  Background="Transparent">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>

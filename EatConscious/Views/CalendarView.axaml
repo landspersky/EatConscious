@@ -6,7 +6,7 @@
              xmlns:model="using:EatConscious.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EatConscious.Views.CalendarView"
-             x:DataType="vm:MainWindowViewModel">
+             x:DataType="vm:CalendarViewModel">
 
     <UserControl.Styles>
         <Style Selector="Border.dayCell">
@@ -117,7 +117,7 @@
                                                IsLightDismissEnabled="True">
                                             <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
                                                     BorderBrush="Gray" BorderThickness="1">
-                                                <ListBox ItemsSource="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).Recipes}"
+                                                <ListBox ItemsSource="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).Recipes}"
                                                          MaxHeight="200" MinWidth="150">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate DataType="model:Recipe">
@@ -144,7 +144,7 @@
                                     <!-- Outer panel hides the summary on empty days, inner one follows the global toggle -->
                                     <Panel Grid.Row="2" IsVisible="{Binding HasEntries}">
                                         <WrapPanel Margin="4 0 4 4" DataContext="{Binding TotalNutrients}"
-                                                   IsVisible="{Binding $parent[UserControl].((vm:MainWindowViewModel)DataContext).ShowDaySummaries}">
+                                                   IsVisible="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).ShowDaySummaries}">
                                             <TextBlock Classes="daySummary" Text="{Binding Kcal, StringFormat='{}{0:0} kcal'}"/>
                                             <TextBlock Classes="daySummary" Text="{Binding Protein, StringFormat='P {0:0}'}"/>
                                             <TextBlock Classes="daySummary" Text="{Binding Carbs, StringFormat='C {0:0}'}"/>

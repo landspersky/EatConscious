@@ -12,7 +12,7 @@ namespace EatConscious.ViewModels;
 /// </summary>
 public class DayDetailViewModel : ViewModelBase
 {
-    private readonly MainWindowViewModel _main;
+    private readonly CalendarViewModel _calendar;
 
     public DateOnly Date { get; }
 
@@ -29,15 +29,15 @@ public class DayDetailViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<MealPlanEntry, Unit> RemoveEntryCommand { get; }
 
-    public DayDetailViewModel(DateOnly date, MainWindowViewModel main)
+    public DayDetailViewModel(DateOnly date, CalendarViewModel calendar)
     {
-        _main = main;
+        _calendar = calendar;
         Date = date;
-        Entries = new ObservableCollection<MealPlanEntry>(main.MealPlan.Where(x => x.Date == date));
+        Entries = new ObservableCollection<MealPlanEntry>(calendar.MealPlan.Where(x => x.Date == date));
 
         RemoveEntryCommand = ReactiveCommand.Create<MealPlanEntry>(entry =>
         {
-            _main.RemoveMealPlanEntry(entry);
+            _calendar.RemoveMealPlanEntry(entry);
             Entries.Remove(entry);
             this.RaisePropertyChanged(nameof(HasEntries));
             this.RaisePropertyChanged(nameof(TotalNutrients));

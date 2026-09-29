@@ -24,9 +24,9 @@
             <DockPanel>
                 <view:IngredientView DockPanel.Dock="Left"/>
                 <!-- we need to find the view model from control and pass itself as parameter -->
-                <!-- in the below binding we fairly assume there is ListBox parent which has DataContext MainWindowViewModel -->
+                <!-- in the below binding we fairly assume there is ListBox parent which has DataContext IngredientsTabViewModel -->
                 <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
-                        Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).DeleteIngredientCommand}"
+                        Command="{Binding $parent[ListBox].((vm:IngredientsTabViewModel)DataContext).DeleteCommand}"
                         CommandParameter="{Binding .}">
                     <Button.Content>
                         <Image Source="/Assets/trash-can-outline.png" Width="24" Height="24"/>
@@ -34,7 +34,7 @@
                 </Button>
                 
                 <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
-                        Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).EditIngredientCommand}"
+                        Command="{Binding $parent[ListBox].((vm:IngredientsTabViewModel)DataContext).EditCommand}"
                         CommandParameter="{Binding .}">
                     <Button.Content>
                         <Image Source="/Assets/pencil.png" Width="24" Height="24"/>
@@ -42,7 +42,7 @@
                 </Button>
                 
                 <CheckBox DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center"
-                    Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).OnCheckCommand}"
+                    Command="{Binding $parent[ListBox].((vm:IngredientsTabViewModel)DataContext).OnCheckCommand}"
                     CommandParameter="{Binding .}"
                     IsChecked="{Binding IsChecked}"
                     Width="40" Height="40"></CheckBox>
@@ -53,7 +53,7 @@
             <DockPanel>
                 <view:RecipeView DockPanel.Dock="Left"/>
                 <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
-                        Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).DeleteRecipeCommand}"
+                        Command="{Binding $parent[ListBox].((vm:RecipesTabViewModel)DataContext).DeleteCommand}"
                         CommandParameter="{Binding .}">
                     <Button.Content>
                         <Image Source="/Assets/trash-can-outline.png" Width="24" Height="24"/>
@@ -61,7 +61,7 @@
                 </Button>
                 
                 <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
-                        Command="{Binding $parent[ListBox].((vm:MainWindowViewModel)DataContext).EditRecipeCommand}"
+                        Command="{Binding $parent[ListBox].((vm:RecipesTabViewModel)DataContext).EditCommand}"
                         CommandParameter="{Binding .}">
                     <Button.Content>
                         <Image Source="/Assets/pencil.png" Width="24" Height="24"/>
@@ -74,12 +74,12 @@
             <Border Classes="mealEntry">
                 <DockPanel>
                     <!-- This template is only ever used inside CalendarView's per-day "Entries" ItemsControl,
-                         whose own DataContext is the day's CalendarDayViewModel (not MainWindowViewModel), so
+                         whose own DataContext is the day's CalendarDayViewModel (not CalendarViewModel), so
                          $parent[ItemsControl] would resolve to that ItemsControl and the cast to
-                         MainWindowViewModel would fail at runtime. Walk up to the nearest UserControl
-                         (CalendarView itself) instead, which does have MainWindowViewModel as its DataContext. -->
+                         CalendarViewModel would fail at runtime. Walk up to the nearest UserControl
+                         (CalendarView itself) instead, which does have CalendarViewModel as its DataContext. -->
                     <Button DockPanel.Dock="Right" Classes="removeButton" HorizontalAlignment="Right"
-                            Command="{Binding $parent[UserControl].((vm:MainWindowViewModel)DataContext).RemoveMealPlanEntryCommand}"
+                            Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).RemoveMealPlanEntryCommand}"
                             CommandParameter="{Binding .}">
                         <Button.Content>
                             <Image Source="/Assets/trash-can-outline.png" Width="18" Height="18"/>
@@ -108,8 +108,9 @@
     
     <TabControl>
         <TabItem Header="Ingredients">
-            <Grid ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
-                <Button Command="{Binding AddIngredientClick}">
+            <!-- Set on the content, not the TabItem: the selected content doesn't inherit the TabItem's DataContext -->
+            <Grid DataContext="{Binding IngredientsTab}" ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
+                <Button Command="{Binding AddCommand}">
                     <Button.Content>
                         <Image Source="/Assets/plus.png" Width="24" Height="24"/>
                     </Button.Content>
@@ -117,12 +118,12 @@
                 
                 <controls:PopupSelector Grid.Row="0" Grid.Column="1"
                                         Content="Filter"
-                                        ItemsSource="{Binding IngredientTags}"
-                                        SelectedItems="{Binding IngredientFilters}"/>
+                                        ItemsSource="{Binding Tags}"
+                                        SelectedItems="{Binding Filters}"/>
                 <controls:PopupSelector Grid.Row="0" Grid.Column="2"
                                         Content="Sort"
                                         ItemsSource="{Binding SortOptions}"
-                                        SelectedItems="{Binding IngredientSorting}"
+                                        SelectedItems="{Binding SortBy}"
                                         SingleSelect="True"/>
                 
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
@@ -138,8 +139,9 @@
             </Grid>
         </TabItem>
         <TabItem Header="Recipes">
-            <Grid ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
-                <Button Command="{Binding AddRecipeClick}">
+            <!-- Set on the content, not the TabItem: the selected content doesn't inherit the TabItem's DataContext -->
+            <Grid DataContext="{Binding RecipesTab}" ColumnDefinitions="Auto Auto *" RowDefinitions="Auto *">
+                <Button Command="{Binding AddCommand}">
                     <Button.Content>
                         <Image Source="/Assets/plus.png" Width="24" Height="24"/>
                     </Button.Content>
@@ -147,12 +149,12 @@
                 
                 <controls:PopupSelector Grid.Row="0" Grid.Column="1"
                                         Content="Filter"
-                                        ItemsSource="{Binding RecipeTags}"
-                                        SelectedItems="{Binding RecipeFilters}"/>
+                                        ItemsSource="{Binding Tags}"
+                                        SelectedItems="{Binding Filters}"/>
                 <controls:PopupSelector Grid.Row="0" Grid.Column="2"
                                         Content="Sort"
                                         ItemsSource="{Binding SortOptions}"
-                                        SelectedItems="{Binding RecipeSorting}"
+                                        SelectedItems="{Binding SortBy}"
                                         SingleSelect="True"/>
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
                     <ListBox ItemsSource="{Binding Recipes}" SelectionMode="Single,Toggle"
@@ -168,7 +170,7 @@
 
         </TabItem>
         <TabItem Header="Calendar">
-            <view:CalendarView/>
+            <view:CalendarView DataContext="{Binding Calendar}"/>
         </TabItem>
     </TabControl>
 

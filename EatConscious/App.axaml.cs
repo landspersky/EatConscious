@@ -48,19 +48,19 @@ public partial class App : Application
 
     private void SerializeData(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-        string json = JsonSerializer.Serialize(_mainModel.WrapIngredients());
+        string json = JsonSerializer.Serialize(_mainModel.IngredientsTab.WrapIngredients());
         using (var sw = new StreamWriter(IngredientsPath, false))
         {
             sw.Write(json);
         }
 
-        json = JsonSerializer.Serialize(_mainModel.WrapRecipes());
+        json = JsonSerializer.Serialize(_mainModel.RecipesTab.WrapRecipes());
         using (var sw = new StreamWriter(RecipePath, false))
         {
             sw.Write(json);
         }
 
-        json = JsonSerializer.Serialize(_mainModel.WrapMealPlan());
+        json = JsonSerializer.Serialize(_mainModel.Calendar.WrapMealPlan());
         using (var sw = new StreamWriter(MealPlanPath, false))
         {
             sw.Write(json);

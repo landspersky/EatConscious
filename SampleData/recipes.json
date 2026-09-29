@@ -1,0 +1,555 @@
+{
+  "Tags": [
+    "breakfast",
+    "lunch",
+    "dinner",
+    "quick",
+    "vegetarian",
+    "vegan",
+    "high-protein",
+    "meal-prep",
+    "budget",
+    "pasta",
+    "soup",
+    "salad",
+    "asian",
+    "mexican",
+    "sweet",
+    "dessert"
+  ],
+  "Recipes": [
+    {
+      "Id": 1,
+      "Name": "Spaghetti Carbonara",
+      "Ingredients": [
+        {
+          "Id": 14,
+          "Value": 200
+        },
+        {
+          "Id": 13,
+          "Value": 100
+        },
+        {
+          "Id": 1,
+          "Value": 2
+        },
+        {
+          "Id": 28,
+          "Value": 40
+        },
+        {
+          "Id": 3,
+          "Value": 1
+        }
+      ],
+      "Tags": [
+        "dinner",
+        "pasta",
+        "quick"
+      ],
+      "Note": "Fry bacon until crisp. Whisk eggs with grated parmesan and plenty of black pepper. Toss hot drained pasta with bacon off the heat, then stir in the egg mix with a splash of pasta water. No cream!"
+    },
+    {
+      "Id": 2,
+      "Name": "Chicken Stir-Fry with Rice",
+      "Ingredients": [
+        {
+          "Id": 10,
+          "Value": 300
+        },
+        {
+          "Id": 15,
+          "Value": 150
+        },
+        {
+          "Id": 22,
+          "Value": 200
+        },
+        {
+          "Id": 8,
+          "Value": 1
+        },
+        {
+          "Id": 43,
+          "Value": 30
+        },
+        {
+          "Id": 3,
+          "Value": 2
+        },
+        {
+          "Id": 40,
+          "Value": 15
+        }
+      ],
+      "Tags": [
+        "dinner",
+        "high-protein",
+        "asian"
+      ],
+      "Note": "Cook rice first. Slice chicken thin, sear on high heat, set aside. Stir-fry broccoli and pepper 3 min, add garlic, chicken and soy sauce. Serves 2."
+    },
+    {
+      "Id": 3,
+      "Name": "Overnight Oats",
+      "Ingredients": [
+        {
+          "Id": 16,
+          "Value": 60
+        },
+        {
+          "Id": 41,
+          "Value": 150
+        },
+        {
+          "Id": 30,
+          "Value": 100
+        },
+        {
+          "Id": 7,
+          "Value": 1
+        },
+        {
+          "Id": 32,
+          "Value": 10
+        }
+      ],
+      "Tags": [
+        "breakfast",
+        "vegetarian",
+        "meal-prep",
+        "quick"
+      ],
+      "Note": "Mix oats, milk and yogurt in a jar, refrigerate overnight. Top with sliced banana and honey in the morning."
+    },
+    {
+      "Id": 4,
+      "Name": "Red Lentil Dahl",
+      "Ingredients": [
+        {
+          "Id": 25,
+          "Value": 200
+        },
+        {
+          "Id": 42,
+          "Value": 200
+        },
+        {
+          "Id": 20,
+          "Value": 200
+        },
+        {
+          "Id": 2,
+          "Value": 1
+        },
+        {
+          "Id": 3,
+          "Value": 3
+        },
+        {
+          "Id": 21,
+          "Value": 100
+        },
+        {
+          "Id": 44,
+          "Value": 300
+        }
+      ],
+      "Tags": [
+        "dinner",
+        "vegan",
+        "meal-prep",
+        "budget"
+      ],
+      "Note": "Soften onion and garlic, add rinsed lentils, tomatoes, stock and coconut milk.\nSimmer 20 min until creamy, stir in spinach at the end.\nKeeps 4 days in the fridge - 4 portions."
+    },
+    {
+      "Id": 5,
+      "Name": "Shakshuka",
+      "Ingredients": [
+        {
+          "Id": 1,
+          "Value": 4
+        },
+        {
+          "Id": 20,
+          "Value": 400
+        },
+        {
+          "Id": 8,
+          "Value": 1
+        },
+        {
+          "Id": 2,
+          "Value": 1
+        },
+        {
+          "Id": 3,
+          "Value": 2
+        },
+        {
+          "Id": 29,
+          "Value": 50
+        },
+        {
+          "Id": 40,
+          "Value": 15
+        }
+      ],
+      "Tags": [
+        "breakfast",
+        "vegetarian"
+      ],
+      "Note": "Cook onion and pepper until soft, add garlic and tomatoes, simmer 10 min. Make wells, crack in the eggs, cover until whites set. Crumble feta on top."
+    },
+    {
+      "Id": 6,
+      "Name": "Greek Salad",
+      "Ingredients": [
+        {
+          "Id": 19,
+          "Value": 250
+        },
+        {
+          "Id": 24,
+          "Value": 200
+        },
+        {
+          "Id": 29,
+          "Value": 100
+        },
+        {
+          "Id": 2,
+          "Value": 0.5
+        },
+        {
+          "Id": 40,
+          "Value": 20
+        },
+        {
+          "Id": 4,
+          "Value": 0.5
+        }
+      ],
+      "Tags": [
+        "lunch",
+        "vegetarian",
+        "quick",
+        "salad"
+      ],
+      "Note": "Chunky-cut tomatoes and cucumber, thin red onion, block of feta on top. Dress with oil and lemon juice."
+    },
+    {
+      "Id": 7,
+      "Name": "Baked Salmon with Potatoes",
+      "Ingredients": [
+        {
+          "Id": 12,
+          "Value": 300
+        },
+        {
+          "Id": 18,
+          "Value": 400
+        },
+        {
+          "Id": 4,
+          "Value": 1
+        },
+        {
+          "Id": 31,
+          "Value": 20
+        },
+        {
+          "Id": 22,
+          "Value": 200
+        }
+      ],
+      "Tags": [
+        "dinner",
+        "high-protein"
+      ],
+      "Note": "Roast halved potatoes at 200 C for 25 min, add salmon with lemon slices and butter for the last 12 min. Steam broccoli on the side."
+    },
+    {
+      "Id": 8,
+      "Name": "Beef Tacos",
+      "Ingredients": [
+        {
+          "Id": 11,
+          "Value": 300
+        },
+        {
+          "Id": 6,
+          "Value": 4
+        },
+        {
+          "Id": 19,
+          "Value": 150
+        },
+        {
+          "Id": 27,
+          "Value": 60
+        },
+        {
+          "Id": 5,
+          "Value": 1
+        },
+        {
+          "Id": 2,
+          "Value": 1
+        }
+      ],
+      "Tags": [
+        "dinner",
+        "mexican"
+      ],
+      "Note": "Brown beef with diced onion, season with cumin and paprika. Serve in warm tortillas with tomato, grated cheddar and mashed avocado."
+    },
+    {
+      "Id": 9,
+      "Name": "Chickpea Curry",
+      "Ingredients": [
+        {
+          "Id": 26,
+          "Value": 400
+        },
+        {
+          "Id": 42,
+          "Value": 200
+        },
+        {
+          "Id": 20,
+          "Value": 200
+        },
+        {
+          "Id": 2,
+          "Value": 1
+        },
+        {
+          "Id": 3,
+          "Value": 2
+        },
+        {
+          "Id": 21,
+          "Value": 100
+        },
+        {
+          "Id": 15,
+          "Value": 150
+        }
+      ],
+      "Tags": [
+        "dinner",
+        "vegan",
+        "budget"
+      ],
+      "Note": "Onion, garlic and curry paste, then chickpeas, tomatoes and coconut milk. Simmer 15 min, wilt spinach in. Serve over rice."
+    },
+    {
+      "Id": 10,
+      "Name": "Fluffy Pancakes",
+      "Ingredients": [
+        {
+          "Id": 17,
+          "Value": 150
+        },
+        {
+          "Id": 41,
+          "Value": 250
+        },
+        {
+          "Id": 1,
+          "Value": 2
+        },
+        {
+          "Id": 31,
+          "Value": 20
+        },
+        {
+          "Id": 32,
+          "Value": 30
+        }
+      ],
+      "Tags": [
+        "breakfast",
+        "vegetarian",
+        "sweet"
+      ],
+      "Note": "Whisk flour, milk, eggs and melted butter into a thick batter; rest 10 min. Cook on a medium pan, flip when bubbles appear. Drizzle with honey. Makes ~8."
+    },
+    {
+      "Id": 11,
+      "Name": "Scrambled Eggs with Spinach",
+      "Ingredients": [
+        {
+          "Id": 1,
+          "Value": 3
+        },
+        {
+          "Id": 21,
+          "Value": 50
+        },
+        {
+          "Id": 31,
+          "Value": 10
+        },
+        {
+          "Id": 41,
+          "Value": 30
+        },
+        {
+          "Id": 34,
+          "Value": 2
+        }
+      ],
+      "Tags": [
+        "breakfast",
+        "quick",
+        "high-protein",
+        "vegetarian"
+      ],
+      "Note": "Low heat, keep stirring, pull off the heat while still a bit wet."
+    },
+    {
+      "Id": 12,
+      "Name": "Potato and Bacon Soup",
+      "Ingredients": [
+        {
+          "Id": 18,
+          "Value": 600
+        },
+        {
+          "Id": 23,
+          "Value": 150
+        },
+        {
+          "Id": 2,
+          "Value": 1
+        },
+        {
+          "Id": 44,
+          "Value": 1000
+        },
+        {
+          "Id": 41,
+          "Value": 200
+        },
+        {
+          "Id": 31,
+          "Value": 20
+        },
+        {
+          "Id": 13,
+          "Value": 60
+        }
+      ],
+      "Tags": [
+        "lunch",
+        "soup",
+        "budget"
+      ],
+      "Note": "Crisp bacon, remove. Sweat onion and carrot in butter, add diced potatoes and stock, simmer 20 min. Blend half, add milk, top with bacon."
+    },
+    {
+      "Id": 13,
+      "Name": "Peanut Butter Banana Smoothie",
+      "Ingredients": [
+        {
+          "Id": 7,
+          "Value": 1
+        },
+        {
+          "Id": 33,
+          "Value": 30
+        },
+        {
+          "Id": 41,
+          "Value": 300
+        },
+        {
+          "Id": 16,
+          "Value": 30
+        },
+        {
+          "Id": 32,
+          "Value": 10
+        }
+      ],
+      "Tags": [
+        "breakfast",
+        "quick",
+        "sweet"
+      ],
+      "Note": "Blend everything until smooth. Frozen banana makes it thicker."
+    },
+    {
+      "Id": 14,
+      "Name": "Chicken Caesar Wrap",
+      "Ingredients": [
+        {
+          "Id": 6,
+          "Value": 2
+        },
+        {
+          "Id": 10,
+          "Value": 200
+        },
+        {
+          "Id": 28,
+          "Value": 20
+        },
+        {
+          "Id": 30,
+          "Value": 60
+        },
+        {
+          "Id": 4,
+          "Value": 0.5
+        },
+        {
+          "Id": 3,
+          "Value": 1
+        }
+      ],
+      "Tags": [
+        "lunch",
+        "high-protein",
+        "quick"
+      ],
+      "Note": "Grill chicken and slice. Quick dressing: yogurt, lemon juice, grated garlic and parmesan. Roll up in tortillas."
+    },
+    {
+      "Id": 15,
+      "Name": "Pasta al Pomodoro",
+      "Ingredients": [
+        {
+          "Id": 14,
+          "Value": 200
+        },
+        {
+          "Id": 20,
+          "Value": 400
+        },
+        {
+          "Id": 3,
+          "Value": 3
+        },
+        {
+          "Id": 40,
+          "Value": 30
+        },
+        {
+          "Id": 28,
+          "Value": 20
+        },
+        {
+          "Id": 34,
+          "Value": 5
+        }
+      ],
+      "Tags": [],
+      "Note": ""
+    }
+  ]
+}
